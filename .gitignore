@@ -1,0 +1,50 @@
+# Archivos compilados en java
+
+*.class
+
+#Logs
+*.log
+
+# Directorios de salida
+out/
+
+# Directorios de dependencias
+lib/
+
+# Archivos de configuración de IDEs
+*.idea/
+
+# Archivos de configuración de Eclipse
+*.project
+*.classpath
+
+# Archivos de configuración de NetBeans
+*.nbproject/
+
+#Archivos temporales
+*.tmp
+
+#Carpeta de compilación
+build/
+bin/
+target/
+out/
+
+#Configuracion de VS code
+.vscode/
+
+#Configuracion de Eclipse
+.settings/
+.project
+.classpath
+
+#configuracion de IntelliJ IDEA
+.idea/
+*.iml
+
+#Archivos de configuración de Maven
+pom.xml
+
+#Archivos del sistema
+.DS_Store
+Thumbs.db
