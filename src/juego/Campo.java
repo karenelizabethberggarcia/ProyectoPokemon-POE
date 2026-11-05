@@ -7,7 +7,7 @@ import java.util.List;
 import cartas.Pokemon;
 
 /**
- * Campo de batalla de un jugador: un Pokémon activo y hasta 2 en el banco.
+ * Campo de batalla de un jugador: un Pokemon activo y hasta 2 en el banco.
  */
 public class Campo {
 
@@ -48,10 +48,10 @@ public class Campo {
         return anterior;
     }
 
-    /** El Pokémon del banco pasa a ser el activo. El activo actual debe haberse quitado antes. */
+    /** El Pokemon del banco pasa a ser el activo. El activo actual debe haberse quitado antes. */
     public void promover(Pokemon delBanco) {
         if (!banco.remove(delBanco)) {
-            throw new IllegalArgumentException("Ese Pokémon no está en el banco.");
+            throw new IllegalArgumentException("Ese Pokemon no esta en el banco.");
         }
         activo = delBanco;
     }
@@ -60,13 +60,13 @@ public class Campo {
     public void intercambiar(Pokemon delBanco) {
         int posicion = banco.indexOf(delBanco);
         if (posicion < 0) {
-            throw new IllegalArgumentException("Ese Pokémon no está en el banco.");
+            throw new IllegalArgumentException("Ese Pokemon no esta en el banco.");
         }
         banco.set(posicion, activo);
         activo = delBanco;
     }
 
-    /** Todos los Pokémon en juego, empezando por el activo. */
+    /** Todos los Pokemon en juego, empezando por el activo. */
     public List<Pokemon> getTodos() {
         List<Pokemon> todos = new ArrayList<>();
         if (activo != null) {

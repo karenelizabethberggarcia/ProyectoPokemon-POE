@@ -3,13 +3,13 @@ package juego;
 import java.util.List;
 
 /**
- * Todo lo que la lógica del juego necesita pedirle o mostrarle al usuario.
- * Así Partida y las cartas no dependen de la consola: la consola es solo
+ * Todo lo que la logica del juego necesita pedirle o mostrarle al usuario.
+ * Asi Partida y las cartas no dependen de la consola: la consola es solo
  * una forma de implementar esto.
  */
 public interface Interaccion {
 
-    /** Muestra un menú numerado y devuelve la posición elegida (empezando en 0). */
+    /** Muestra un menu numerado y devuelve la posicion elegida (empezando en 0). */
     int elegirOpcion(String titulo, List<String> opciones);
 
     void mostrarMensaje(String mensaje);

@@ -1,6 +1,6 @@
 package cartas;
 
-/** Entrenador de tipo soporte: máximo uno por turno. */
+/** Entrenador de tipo soporte: maximo uno por turno. */
 public abstract class Soporte extends Entrenador {
 
     protected Soporte(String nombre, String descripcion) {

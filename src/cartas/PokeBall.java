@@ -11,7 +11,7 @@ import juego.Jugador;
 public class PokeBall extends Objeto {
 
     public PokeBall() {
-        super("Poké Ball", "Busca en tu mazo 1 Pokémon básico y ponlo en tu mano.");
+        super("Poke Ball", "Busca en tu mazo 1 Pokemon basico y ponlo en tu mano.");
     }
 
     @Override
@@ -35,7 +35,7 @@ public class PokeBall extends Objeto {
             opciones.add(p.getResumen());
         }
 
-        int eleccion = interaccion.elegirOpcion("Poké Ball: ¿qué Pokémon buscas en tu mazo?", opciones);
+        int eleccion = interaccion.elegirOpcion("Poke Ball: ?que Pokemon buscas en tu mazo?", opciones);
         Pokemon elegido = candidatos.get(eleccion);
 
         jugador.getMazo().extraer(elegido);

@@ -6,14 +6,14 @@ import java.util.List;
 /**
  * Crea las cartas de Genetic Apex que pide el enunciado.
  * Cada llamada crea una carta nueva, porque dos copias de Pikachu
- * tienen que tener su propia vida y sus propias energías.
+ * tienen que tener su propia vida y sus propias energias.
  */
 public class CatalogoCartas {
 
     private static final String[] NOMBRES = {
         "Pikachu", "Charmander", "Squirtle", "Jigglypuff", "Magikarp", "Snorlax",
         "Mewtwo ex", "Zapdos ex", "Moltres ex", "Articuno ex",
-        "Investigación del Profesor", "Poción", "Poké Ball", "Turbo Velocidad", "Misty"
+        "Investigacion del Profesor", "Pocion", "Poke Ball", "Turbo Velocidad", "Misty"
     };
 
     /** Crea una carta nueva a partir de su nombre. */
@@ -38,11 +38,11 @@ public class CatalogoCartas {
             return moltresEx();
         } else if (nombre.equals("Articuno ex")) {
             return articunoEx();
-        } else if (nombre.equals("Investigación del Profesor")) {
+        } else if (nombre.equals("Investigacion del Profesor")) {
             return new InvestigacionProfesor();
-        } else if (nombre.equals("Poción")) {
+        } else if (nombre.equals("Pocion")) {
             return new Pocion();
-        } else if (nombre.equals("Poké Ball")) {
+        } else if (nombre.equals("Poke Ball")) {
             return new PokeBall();
         } else if (nombre.equals("Turbo Velocidad")) {
             return new TurboVelocidad();
@@ -60,7 +60,7 @@ public class CatalogoCartas {
         return lista;
     }
 
-    // ---------- Pokémon básicos ----------
+    // ---------- Pokemon basicos ----------
 
     public static Pokemon pikachu() {
         List<Ataque> ataques = new ArrayList<>();
@@ -98,11 +98,11 @@ public class CatalogoCartas {
         return new PokemonBasico("Snorlax", Tipo.INCOLORO, 150, 3, ataques);
     }
 
-    // ---------- Pokémon-ex ----------
+    // ---------- Pokemon-ex ----------
 
     public static Pokemon mewtwoEx() {
         List<Ataque> ataques = new ArrayList<>();
-        ataques.add(new Ataque("Ataque Psíquico", Tipo.PSIQUICO, 2, 50));
+        ataques.add(new Ataque("Ataque Psiquico", Tipo.PSIQUICO, 2, 50));
         ataques.add(new Ataque("Psicorrayo", Tipo.PSIQUICO, 3, 150));
         return new PokemonEx("Mewtwo ex", Tipo.PSIQUICO, 150, 2, ataques);
     }
@@ -110,7 +110,7 @@ public class CatalogoCartas {
     public static Pokemon zapdosEx() {
         List<Ataque> ataques = new ArrayList<>();
         ataques.add(new Ataque("Picotazo", Tipo.INCOLORO, 1, 30));
-        ataques.add(new Ataque("Tormenta Eléctrica", Tipo.ELECTRICO, 3, 100));
+        ataques.add(new Ataque("Tormenta Electrica", Tipo.ELECTRICO, 3, 100));
         return new PokemonEx("Zapdos ex", Tipo.ELECTRICO, 130, 2, ataques);
     }
 

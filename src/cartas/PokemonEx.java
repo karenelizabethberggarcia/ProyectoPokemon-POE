@@ -2,7 +2,7 @@ package cartas;
 
 import java.util.List;
 
-/** Pokémon-ex: da 2 puntos de premio al ser derrotado. */
+/** Pokemon-ex: da 2 puntos de premio al ser derrotado. */
 public class PokemonEx extends Pokemon {
 
     public PokemonEx(String nombre, Tipo tipo, int ps, int costoRetirada, List<Ataque> ataques) {
@@ -16,6 +16,6 @@ public class PokemonEx extends Pokemon {
 
     @Override
     public String getDescripcion() {
-        return super.getDescripcion() + " (Pokémon-ex, vale 2 puntos de premio)";
+        return super.getDescripcion() + " (Pokemon-ex, vale 2 puntos de premio)";
     }
 }

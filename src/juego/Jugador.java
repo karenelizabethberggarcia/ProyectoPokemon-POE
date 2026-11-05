@@ -70,7 +70,7 @@ public class Jugador {
         return mano.remove(carta);
     }
 
-    /** Roba una carta. Devuelve null si el mazo está vacío. */
+    /** Roba una carta. Devuelve null si el mazo esta vacio. */
     public Carta robarCarta() {
         Carta carta = mazo.robar();
         if (carta != null) {
@@ -79,7 +79,7 @@ public class Jugador {
         return carta;
     }
 
-    /** Roba hasta n cartas y devuelve cuántas pudo robar realmente. */
+    /** Roba hasta n cartas y devuelve cuantas pudo robar realmente. */
     public int robarCartas(int n) {
         int robadas = 0;
         while (robadas < n && robarCarta() != null) {
@@ -123,13 +123,13 @@ public class Jugador {
         return resultado;
     }
 
-    // ---------- Zona de energía ----------
+    // ---------- Zona de energia ----------
 
     public Tipo getEnergiaZona() {
         return energiaZona;
     }
 
-    /** Si la zona está vacía genera una energía de alguno de los tipos del mazo. */
+    /** Si la zona esta vacia genera una energia de alguno de los tipos del mazo. */
     public void generarEnergiaZona(Random random) {
         if (energiaZona == null) {
             List<Tipo> tipos = mazo.getTiposEnergia();
@@ -137,7 +137,7 @@ public class Jugador {
         }
     }
 
-    /** Toma la energía de la zona (queda vacía hasta el próximo turno). */
+    /** Toma la energia de la zona (queda vacia hasta el proximo turno). */
     public Tipo usarEnergiaZona() {
         Tipo energia = energiaZona;
         energiaZona = null;

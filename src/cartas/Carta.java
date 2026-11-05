@@ -2,7 +2,7 @@ package cartas;
 
 /**
  * Clase base de todas las cartas del juego. Es abstracta porque no existe
- * una "carta genérica": siempre es un Pokémon o un entrenador.
+ * una "carta generica": siempre es un Pokemon o un entrenador.
  */
 public abstract class Carta {
 

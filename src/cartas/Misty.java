@@ -11,7 +11,7 @@ public class Misty extends Soporte {
     private static final int MAX_ENERGIAS = 3;
 
     public Misty() {
-        super("Misty", "Adjunta hasta 3 energía 💧 a uno de tus Pokémon de Agua.");
+        super("Misty", "Adjunta hasta 3 energia A a uno de tus Pokemon de Agua.");
     }
 
     @Override
@@ -26,19 +26,19 @@ public class Misty extends Soporte {
         for (Pokemon p : aguas) {
             opciones.add(p.getResumen());
         }
-        int eleccion = interaccion.elegirOpcion("Misty: ¿a qué Pokémon de Agua le adjuntas energía?", opciones);
+        int eleccion = interaccion.elegirOpcion("Misty: ?a que Pokemon de Agua le adjuntas energia?", opciones);
         Pokemon destino = aguas.get(eleccion);
 
         List<String> cantidades = new ArrayList<>();
         for (int i = 1; i <= MAX_ENERGIAS; i++) {
-            cantidades.add(i + " energía(s) " + Tipo.AGUA.getSimbolo());
+            cantidades.add(i + " energia(s) " + Tipo.AGUA.getSimbolo());
         }
-        int cantidad = interaccion.elegirOpcion("¿Cuántas energías adjuntas? (hasta 3)", cantidades) + 1;
+        int cantidad = interaccion.elegirOpcion("?Cuantas energias adjuntas? (hasta 3)", cantidades) + 1;
 
         for (int i = 0; i < cantidad; i++) {
             destino.adjuntarEnergia(Tipo.AGUA);
         }
-        interaccion.mostrarMensaje("Misty adjunta " + cantidad + " energía(s) " + Tipo.AGUA.getSimbolo()
+        interaccion.mostrarMensaje("Misty adjunta " + cantidad + " energia(s) " + Tipo.AGUA.getSimbolo()
                 + " a " + destino.getNombre() + ".");
     }
 

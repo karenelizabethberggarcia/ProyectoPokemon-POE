@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Parte común de todos los Pokémon: vida, energías adjuntas, ataques y daño.
- * Lo único que cambia entre un Pokémon normal y uno ex son los puntos de premio.
+ * Parte comun de todos los Pokemon: vida, energias adjuntas, ataques y dano.
+ * Lo unico que cambia entre un Pokemon normal y uno ex son los puntos de premio.
  */
 public abstract class Pokemon extends Carta {
 
@@ -28,10 +28,10 @@ public abstract class Pokemon extends Carta {
         this.ataques = new ArrayList<>(ataques);
     }
 
-    /** Puntos de premio que recibe el rival cuando este Pokémon es derrotado. */
+    /** Puntos de premio que recibe el rival cuando este Pokemon es derrotado. */
     public abstract int getPuntosPremio();
 
-    // ---------- Datos básicos ----------
+    // ---------- Datos basicos ----------
 
     public Tipo getTipo() {
         return tipo;
@@ -64,7 +64,7 @@ public abstract class Pokemon extends Carta {
 
     @Override
     public String getDescripcion() {
-        return "Pokémon de tipo " + tipo + " con " + psMaximos + " PS";
+        return "Pokemon de tipo " + tipo + " con " + psMaximos + " PS";
     }
 
     // ---------- Vida ----------
@@ -85,13 +85,13 @@ public abstract class Pokemon extends Carta {
         return psActuales < psMaximos;
     }
 
-    // ---------- Energías ----------
+    // ---------- Energias ----------
 
     public void adjuntarEnergia(Tipo energia) {
         energias.add(energia);
     }
 
-    /** Quita una energía de ese tipo. Devuelve false si no tenía ninguna. */
+    /** Quita una energia de ese tipo. Devuelve false si no tenia ninguna. */
     public boolean descartarEnergia(Tipo energia) {
         return energias.remove(energia);
     }
@@ -113,8 +113,8 @@ public abstract class Pokemon extends Carta {
     // ---------- Combate ----------
 
     /**
-     * Un ataque se puede usar si hay suficientes energías del tipo pedido.
-     * Si el costo es incoloro sirve cualquier energía.
+     * Un ataque se puede usar si hay suficientes energias del tipo pedido.
+     * Si el costo es incoloro sirve cualquier energia.
      */
     public boolean puedeUsar(Ataque ataque) {
         if (ataque.getTipoCosto() == Tipo.INCOLORO) {
@@ -137,7 +137,7 @@ public abstract class Pokemon extends Carta {
         return false;
     }
 
-    /** Daño base del ataque más 20 si el defensor es débil al tipo de este Pokémon. */
+    /** Dano base del ataque mas 20 si el defensor es debil al tipo de este Pokemon. */
     public int calcularDano(Ataque ataque, Pokemon defensor) {
         int dano = ataque.getDanoBase();
         if (defensor.esDebilA(tipo)) {

@@ -1,16 +1,16 @@
 package cartas;
 
 /**
- * Tipos de Pokémon y de energía. Se usa el mismo enum para las dos cosas
- * porque en este juego cada Pokémon es de un tipo y esa misma energía lo alimenta.
- * INCOLORO como energía requerida significa "cualquier energía".
+ * Tipos de Pokemon y de energia. Se usa el mismo enum para las dos cosas
+ * porque en este juego cada Pokemon es de un tipo y esa misma energia lo alimenta.
+ * INCOLORO como energia requerida significa "cualquier energia".
  */
 public enum Tipo {
-    ELECTRICO("Eléctrico", "⚡"),
-    FUEGO("Fuego", "🔥"),
-    AGUA("Agua", "💧"),
-    PSIQUICO("Psíquico", "🔮"),
-    INCOLORO("Incoloro", "☆");
+    ELECTRICO("Electrico", "E"),
+    FUEGO("Fuego", "F"),
+    AGUA("Agua", "A"),
+    PSIQUICO("Psiquico", "P"),
+    INCOLORO("Incoloro", "*");
 
     private final String nombre;
     private final String simbolo;

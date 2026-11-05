@@ -15,11 +15,11 @@ import juego.MazosPredefinidos;
 import juego.Partida;
 
 /**
- * Interfaz por consola: menús numerados y dibujo del estado del campo.
+ * Interfaz por consola: menus numerados y dibujo del estado del campo.
  */
 public class ConsolaUI implements Interaccion {
 
-    private static final String LINEA = repetir("═", 54);
+    private static final String LINEA = "============================================================";
     private static final int ANCHO_BARRA = 10;
 
     private final Scanner entrada;
@@ -31,12 +31,12 @@ public class ConsolaUI implements Interaccion {
     }
 
     // ======================================================
-    //  Menú inicial
+    //  Menu inicial
     // ======================================================
 
     public void mostrarBienvenida() {
         salida.println(LINEA);
-        salida.println("  POKÉMON TCG POCKET - Genetic Apex (versión consola)");
+        salida.println("  POKEMON TCG POCKET )");
         salida.println(LINEA);
         salida.println("Gana el primero que consiga " + Partida.PUNTOS_PARA_GANAR + " puntos de premio.");
     }
@@ -48,7 +48,7 @@ public class ConsolaUI implements Interaccion {
         return texto.isEmpty() ? nombrePorDefecto : texto;
     }
 
-    /** Devuelve el índice del mazo predefinido elegido. */
+    /** Devuelve el indice del mazo predefinido elegido. */
     public int elegirMazo(String nombreJugador) {
         List<String> opciones = new ArrayList<>();
         for (int i = 0; i < MazosPredefinidos.cantidad(); i++) {
@@ -70,7 +70,7 @@ public class ConsolaUI implements Interaccion {
                 salida.println((i + 1) + ". " + opciones.get(i));
             }
             salida.println(LINEA);
-            salida.print("Opción: ");
+            salida.print("Opcion: ");
             salida.flush();
 
             String texto = entrada.nextLine().trim();
@@ -82,7 +82,7 @@ public class ConsolaUI implements Interaccion {
             } catch (NumberFormatException e) {
                 // cae al mensaje de abajo
             }
-            salida.println("Opción no válida, escribe un número entre 1 y " + opciones.size() + ".");
+            salida.println("Opcion no valida, escribe un numero entre 1 y " + opciones.size() + ".");
         }
     }
 
@@ -103,7 +103,7 @@ public class ConsolaUI implements Interaccion {
     public void mostrarTablero(int turno, Jugador actual, Jugador rival) {
         salida.println();
         salida.println(LINEA);
-        salida.println("TURNO " + turno + " — " + actual.getNombre());
+        salida.println("TURNO " + turno + " - " + actual.getNombre());
         salida.println(LINEA);
 
         imprimirCampo("RIVAL (" + rival.getNombre() + ")", rival);
@@ -116,9 +116,9 @@ public class ConsolaUI implements Interaccion {
 
         Tipo zona = actual.getEnergiaZona();
         if (zona == null) {
-            salida.println("Zona de energía: vacía (ya usaste la de este turno)");
+            salida.println("Zona de energia: vacia (ya usaste la de este turno)");
         } else {
-            salida.println("Zona de energía: " + zona.getSimbolo() + " (disponible)");
+            salida.println("Zona de energia: " + zona.getSimbolo() + " (disponible)");
         }
 
         List<Carta> mano = actual.getMano();
@@ -132,8 +132,8 @@ public class ConsolaUI implements Interaccion {
     public void mostrarGanador(Jugador ganador, String motivo) {
         salida.println();
         salida.println(LINEA);
-        salida.println("🏆 ¡FIN DEL DUELO! 🏆");
-        salida.println("¡" + ganador.getNombre() + " se convierte en el nuevo Maestro Pokémon!");
+        salida.println(" !FIN DEL DUELO! ");
+        salida.println("!" + ganador.getNombre() + " se convierte en el nuevo Maestro Pokemon!");
         salida.println(motivo);
         salida.println(LINEA);
     }
@@ -145,16 +145,16 @@ public class ConsolaUI implements Interaccion {
     private void imprimirCampo(String titulo, Jugador jugador) {
         Pokemon activo = jugador.getCampo().getActivo();
         if (activo == null) {
-            salida.println(titulo + "  (sin Pokémon activo)");
+            salida.println(titulo + "  (sin Pokemon activo)");
         } else {
             salida.println(titulo + "  PS: " + barraDeVida(activo) + " "
                     + activo.getPsActuales() + "/" + activo.getPsMaximos());
-            salida.println("[Activo] " + activo.getNombre() + "   Energía adjunta: " + energiasComoTexto(activo));
+            salida.println("[Activo] " + activo.getNombre() + "   Energia adjunta: " + energiasComoTexto(activo));
         }
 
         List<Pokemon> banco = jugador.getCampo().getBanco();
         if (banco.isEmpty()) {
-            salida.println("[Banco] (vacío)");
+            salida.println("[Banco] (vacio)");
         } else {
             List<String> textos = new ArrayList<>();
             for (Pokemon p : banco) {
@@ -166,10 +166,10 @@ public class ConsolaUI implements Interaccion {
 
     private String barraDeVida(Pokemon pokemon) {
         int llenos = (int) Math.ceil((double) pokemon.getPsActuales() * ANCHO_BARRA / pokemon.getPsMaximos());
-        return repetir("█", llenos) + repetir("░", ANCHO_BARRA - llenos);
+        return repetir("#", llenos) + repetir(".", ANCHO_BARRA - llenos);
     }
 
-    /** Repite un texto varias veces (para las líneas y la barra de vida). */
+    /** Repite un texto varias veces (para las lineas y la barra de vida). */
     private static String repetir(String texto, int veces) {
         String resultado = "";
         for (int i = 0; i < veces; i++) {

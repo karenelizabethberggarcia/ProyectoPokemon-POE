@@ -2,7 +2,7 @@ package cartas;
 
 import java.util.List;
 
-/** Pokémon normal: da 1 punto de premio al ser derrotado. */
+/** Pokemon normal: da 1 punto de premio al ser derrotado. */
 public class PokemonBasico extends Pokemon {
 
     public PokemonBasico(String nombre, Tipo tipo, int ps, int costoRetirada, List<Ataque> ataques) {

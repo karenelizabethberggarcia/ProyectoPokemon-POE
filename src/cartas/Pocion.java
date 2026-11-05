@@ -8,7 +8,7 @@ public class Pocion extends Objeto {
     private static final int CURACION = 20;
 
     public Pocion() {
-        super("Poción", "Cura 20 PS al Pokémon activo propio.");
+        super("Pocion", "Cura 20 PS al Pokemon activo propio.");
     }
 
     @Override

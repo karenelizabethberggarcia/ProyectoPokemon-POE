@@ -8,7 +8,7 @@ public class InvestigacionProfesor extends Soporte {
     private static final int CARTAS_A_ROBAR = 2;
 
     public InvestigacionProfesor() {
-        super("Investigación del Profesor", "Descarta tu mano actual y roba 2 cartas del mazo.");
+        super("Investigacion del Profesor", "Descarta tu mano actual y roba 2 cartas del mazo.");
     }
 
     @Override

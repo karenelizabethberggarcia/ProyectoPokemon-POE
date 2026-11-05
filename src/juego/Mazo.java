@@ -12,8 +12,8 @@ import cartas.Tipo;
 
 /**
  * Mazo de un jugador. Al crearlo se valida que cumpla las reglas del enunciado
- * (20 cartas, máximo 2 copias de cada una y al menos 6 Pokémon básicos).
- * Después, durante la partida, va perdiendo cartas al robar.
+ * (20 cartas, maximo 2 copias de cada una y al menos 6 Pokemon basicos).
+ * Despues, durante la partida, va perdiendo cartas al robar.
  */
 public class Mazo {
 
@@ -28,14 +28,14 @@ public class Mazo {
     public Mazo(String nombre, List<Carta> cartas) {
         List<String> errores = validar(cartas);
         if (!errores.isEmpty()) {
-            throw new IllegalArgumentException("Mazo inválido (" + nombre + "): " + String.join(" ", errores));
+            throw new IllegalArgumentException("Mazo invalido (" + nombre + "): " + String.join(" ", errores));
         }
         this.nombre = nombre;
         this.cartas = new ArrayList<>(cartas);
         this.tiposEnergia = calcularTiposEnergia(cartas);
     }
 
-    /** Devuelve la lista de problemas del mazo; si está vacía el mazo es válido. */
+    /** Devuelve la lista de problemas del mazo; si esta vacia el mazo es valido. */
     public static List<String> validar(List<Carta> cartas) {
         List<String> errores = new ArrayList<>();
 
@@ -43,7 +43,7 @@ public class Mazo {
             errores.add("Debe tener exactamente " + TAMANO + " cartas y tiene " + cartas.size() + ".");
         }
 
-        // Cuántas copias hay de cada carta (se cuenta por nombre)
+        // Cuantas copias hay de cada carta (se cuenta por nombre)
         Map<String, Integer> copias = new HashMap<>();
         int pokemon = 0;
         for (Carta c : cartas) {
@@ -59,17 +59,17 @@ public class Mazo {
         }
         for (String nombre : copias.keySet()) {
             if (copias.get(nombre) > MAX_COPIAS) {
-                errores.add("Hay más de " + MAX_COPIAS + " copias de " + nombre + ".");
+                errores.add("Hay mas de " + MAX_COPIAS + " copias de " + nombre + ".");
             }
         }
         if (pokemon < MIN_POKEMON) {
-            errores.add("Debe tener al menos " + MIN_POKEMON + " Pokémon básicos y tiene " + pokemon + ".");
+            errores.add("Debe tener al menos " + MIN_POKEMON + " Pokemon basicos y tiene " + pokemon + ".");
         }
         return errores;
     }
 
     /**
-     * La zona de energía genera los tipos que aparecen en los Pokémon del mazo.
+     * La zona de energia genera los tipos que aparecen en los Pokemon del mazo.
      * Los incoloros no cuentan; si el mazo solo tuviera incoloros se usan todos los tipos.
      */
     private static List<Tipo> calcularTiposEnergia(List<Carta> cartas) {
@@ -103,7 +103,7 @@ public class Mazo {
         Collections.shuffle(cartas);
     }
 
-    /** Saca la carta de arriba. Devuelve null si el mazo está vacío. */
+    /** Saca la carta de arriba. Devuelve null si el mazo esta vacio. */
     public Carta robar() {
         if (cartas.isEmpty()) {
             return null;
@@ -123,7 +123,7 @@ public class Mazo {
         cartas.addAll(nuevas);
     }
 
-    /** Pokémon que quedan en el mazo (para la Poké Ball). */
+    /** Pokemon que quedan en el mazo (para la Poke Ball). */
     public List<Pokemon> getPokemon() {
         List<Pokemon> resultado = new ArrayList<>();
         for (Carta c : cartas) {

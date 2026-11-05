@@ -8,7 +8,7 @@ public class TurboVelocidad extends Objeto {
     private static final int REDUCCION = 1;
 
     public TurboVelocidad() {
-        super("Turbo Velocidad", "Reduce en 1 el costo de retirada del Pokémon activo este turno.");
+        super("Turbo Velocidad", "Reduce en 1 el costo de retirada del Pokemon activo este turno.");
     }
 
     @Override
@@ -21,6 +21,6 @@ public class TurboVelocidad extends Objeto {
         jugador.reducirCostoRetirada(REDUCCION);
         Pokemon activo = jugador.getCampo().getActivo();
         interaccion.mostrarMensaje("Este turno retirar a " + activo.getNombre() + " cuesta "
-                + jugador.getCostoRetiradaActual() + " energía(s).");
+                + jugador.getCostoRetiradaActual() + " energia(s).");
     }
 }

@@ -1,7 +1,7 @@
 package cartas;
 
 /**
- * Ataque de un Pokémon. Es inmutable: una vez creado no cambia.
+ * Ataque de un Pokemon. Es inmutable: una vez creado no cambia.
  */
 public class Ataque {
 
@@ -35,6 +35,6 @@ public class Ataque {
 
     @Override
     public String toString() {
-        return nombre + " (" + cantidadCosto + tipoCosto.getSimbolo() + "): " + danoBase + " daño";
+        return nombre + " (" + cantidadCosto + tipoCosto.getSimbolo() + "): " + danoBase + " dano";
     }
 }

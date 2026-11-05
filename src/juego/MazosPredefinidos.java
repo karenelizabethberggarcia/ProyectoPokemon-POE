@@ -7,8 +7,8 @@ import cartas.Carta;
 import cartas.CatalogoCartas;
 
 /**
- * Mazos listos para jugar. La lógica del juego no depende de estos mazos,
- * funciona con cualquier mazo que pase la validación de Mazo.
+ * Mazos listos para jugar. La logica del juego no depende de estos mazos,
+ * funciona con cualquier mazo que pase la validacion de Mazo.
  */
 public class MazosPredefinidos {
 
@@ -20,10 +20,10 @@ public class MazosPredefinidos {
     };
 
     private static final String[] DESCRIPCIONES = {
-        "Mewtwo ex y Zapdos ex, con energía psíquica, eléctrica y de fuego",
-        "Pikachu y Zapdos ex, con energía eléctrica y de agua",
-        "Moltres ex y Charmander, con energía de fuego y de agua",
-        "Articuno ex y compañía, solo energía de agua"
+        "Mewtwo ex y Zapdos ex, con energia psiquica, electrica y de fuego",
+        "Pikachu y Zapdos ex, con energia electrica y de agua",
+        "Moltres ex y Charmander, con energia de fuego y de agua",
+        "Articuno ex y compania, solo energia de agua"
     };
 
     public static int cantidad() {
@@ -83,9 +83,9 @@ public class MazosPredefinidos {
 
     /** Las 4 cartas de entrenador que usan todos los mazos (2 copias de cada una). */
     private static void agregarEntrenadoresBasicos(List<Carta> cartas) {
-        agregar(cartas, "Investigación del Profesor", 2);
-        agregar(cartas, "Poción", 2);
-        agregar(cartas, "Poké Ball", 2);
+        agregar(cartas, "Investigacion del Profesor", 2);
+        agregar(cartas, "Pocion", 2);
+        agregar(cartas, "Poke Ball", 2);
         agregar(cartas, "Turbo Velocidad", 2);
     }
 

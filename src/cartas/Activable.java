@@ -8,9 +8,9 @@ import juego.Jugador;
  */
 public interface Activable {
 
-    /** Indica si ahora mismo el efecto tendría algún objetivo válido. */
+    /** Indica si ahora mismo el efecto tendria algun objetivo valido. */
     boolean puedeActivarse(Jugador jugador);
 
-    /** Aplica el efecto de la carta. Se llama después de sacarla de la mano. */
+    /** Aplica el efecto de la carta. Se llama despues de sacarla de la mano. */
     void activar(Jugador jugador, Interaccion interaccion);
 }

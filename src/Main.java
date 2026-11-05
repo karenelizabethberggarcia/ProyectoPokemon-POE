@@ -1,7 +1,6 @@
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 import consola.ConsolaUI;
 import juego.Jugador;
@@ -13,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
         // Forzamos UTF-8 para que las tildes y los emojis se vean bien en la consola
         PrintStream salida = new PrintStream(System.out, true, StandardCharsets.UTF_8);
-        Scanner entrada = new Scanner(System.in, StandardCharsets.UTF_8);
+        java.util.Scanner entrada = new java.util.Scanner(System.in, StandardCharsets.UTF_8);
         ConsolaUI consola = new ConsolaUI(entrada, salida);
 
         try {
@@ -30,7 +29,7 @@ public class Main {
             new Partida(jugador1, jugador2, consola).jugar();
         } catch (NoSuchElementException e) {
             salida.println();
-            salida.println("Se cerró la entrada de datos, el duelo se cancela.");
+            salida.println("Se cerro la entrada de datos, el duelo se cancela.");
         }
     }
 }

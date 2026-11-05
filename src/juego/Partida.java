@@ -9,9 +9,10 @@ import cartas.Carta;
 import cartas.Entrenador;
 import cartas.Pokemon;
 import cartas.Tipo;
+import consola.ConsolaUI;
 
 /**
- * Controla un duelo completo entre dos jugadores: preparación, turnos,
+ * Controla un duelo completo entre dos jugadores: preparacion, turnos,
  * combate y condiciones de victoria.
  */
 public class Partida {
@@ -20,10 +21,10 @@ public class Partida {
     public static final int CARTAS_INICIALES = 5;
 
     private static final String[] OPCIONES_TURNO = {
-        "Adjuntar energía de zona",
+        "Adjuntar energia de zona",
         "Jugar carta de entrenador",
-        "Colocar Pokémon en banco",
-        "Retirar Pokémon activo",
+        "Colocar Pokemon en banco",
+        "Retirar Pokemon activo",
         "Atacar",
         "Pasar turno"
     };
@@ -47,6 +48,10 @@ public class Partida {
         }
     }
 
+    public Partida(Jugador jugador12, Jugador jugador22, ConsolaUI consola) {
+        this(jugador12, jugador22, (Interaccion) consola);
+    }
+
     public Jugador getGanador() {
         return ganador;
     }
@@ -61,7 +66,7 @@ public class Partida {
 
         Jugador actual = random.nextBoolean() ? jugador1 : jugador2;
         Jugador rival = (actual == jugador1) ? jugador2 : jugador1;
-        interaccion.mostrarMensaje("Se lanza una moneda... ¡" + actual.getNombre() + " empieza el duelo!");
+        interaccion.mostrarMensaje("Se lanza una moneda... !" + actual.getNombre() + " empieza el duelo!");
 
         prepararCampo(actual);
         prepararCampo(rival);
@@ -81,30 +86,30 @@ public class Partida {
     }
 
     // ======================================================
-    //  Preparación
+    //  Preparacion
     // ======================================================
 
-    /** Baraja, reparte 5 cartas y repite (mulligan) mientras no haya ningún Pokémon en la mano. */
+    /** Baraja, reparte 5 cartas y repite (mulligan) mientras no haya ningun Pokemon en la mano. */
     private void repartirManoInicial(Jugador jugador) {
         jugador.getMazo().barajar();
         jugador.robarCartas(CARTAS_INICIALES);
 
         while (jugador.getPokemonEnMano().isEmpty()) {
             interaccion.mostrarMensaje(jugador.getNombre()
-                    + " no tiene Pokémon básicos en su mano inicial: mulligan.");
+                    + " no tiene Pokemon basicos en su mano inicial: mulligan.");
             jugador.devolverManoAlMazo();
             jugador.getMazo().barajar();
             jugador.robarCartas(CARTAS_INICIALES);
         }
     }
 
-    /** El jugador elige su Pokémon activo y, si quiere, hasta 2 en el banco. */
+    /** El jugador elige su Pokemon activo y, si quiere, hasta 2 en el banco. */
     private void prepararCampo(Jugador jugador) {
-        interaccion.esperarContinuar("Preparación del campo de " + jugador.getNombre() + ".");
+        interaccion.esperarContinuar("Preparacion del campo de " + jugador.getNombre() + ".");
         interaccion.mostrarMensaje("Tu mano: " + nombresDeCartas(jugador.getMano()));
 
         List<Pokemon> disponibles = jugador.getPokemonEnMano();
-        int eleccion = interaccion.elegirOpcion(jugador.getNombre() + ", elige tu Pokémon activo:",
+        int eleccion = interaccion.elegirOpcion(jugador.getNombre() + ", elige tu Pokemon activo:",
                 resumenes(disponibles));
         Pokemon activo = disponibles.get(eleccion);
         jugador.quitarDeMano(activo);
@@ -116,8 +121,8 @@ public class Partida {
                 break;
             }
             List<String> opciones = resumenes(restantes);
-            opciones.add("No colocar más Pokémon");
-            int opcion = interaccion.elegirOpcion("¿Quieres poner un Pokémon en el banco?", opciones);
+            opciones.add("No colocar mas Pokemon");
+            int opcion = interaccion.elegirOpcion("?Quieres poner un Pokemon en el banco?", opciones);
             if (opcion == restantes.size()) {
                 break;
             }
@@ -147,7 +152,7 @@ public class Partida {
         boolean turnoTerminado = false;
         while (!turnoTerminado && ganador == null) {
             interaccion.mostrarTablero(numeroTurno, actual, rival);
-            int opcion = interaccion.elegirOpcion("¿Qué deseas hacer?", menuTurno);
+            int opcion = interaccion.elegirOpcion("?Que deseas hacer?", menuTurno);
             switch (opcion) {
                 case 0:
                     adjuntarEnergia(actual);
@@ -168,7 +173,7 @@ public class Partida {
                     turnoTerminado = true;
                     break;
                 default:
-                    interaccion.mostrarMensaje("Opción no válida.");
+                    interaccion.mostrarMensaje("Opcion no valida.");
             }
         }
         actual.terminarTurno();
@@ -176,7 +181,7 @@ public class Partida {
 
     private void adjuntarEnergia(Jugador jugador) {
         if (jugador.getEnergiaZona() == null) {
-            interaccion.mostrarMensaje("Ya usaste la energía de la zona en este turno.");
+            interaccion.mostrarMensaje("Ya usaste la energia de la zona en este turno.");
             return;
         }
 
@@ -188,7 +193,7 @@ public class Partida {
         }
         opciones.add("Cancelar");
 
-        String titulo = "¿A qué Pokémon le adjuntas la energía " + jugador.getEnergiaZona().getSimbolo() + "?";
+        String titulo = "?A que Pokemon le adjuntas la energia " + jugador.getEnergiaZona().getSimbolo() + "?";
         int eleccion = interaccion.elegirOpcion(titulo, opciones);
         if (eleccion == enJuego.size()) {
             return;
@@ -214,7 +219,7 @@ public class Partida {
         }
         opciones.add("Cancelar");
 
-        int eleccion = interaccion.elegirOpcion("¿Qué carta de entrenador juegas?", opciones);
+        int eleccion = interaccion.elegirOpcion("?Que carta de entrenador juegas?", opciones);
         if (eleccion == entrenadores.size()) {
             return;
         }
@@ -225,7 +230,7 @@ public class Partida {
             return;
         }
         if (!carta.puedeActivarse(jugador)) {
-            interaccion.mostrarMensaje("No puedes jugar " + carta.getNombre() + " ahora: no tendría ningún efecto.");
+            interaccion.mostrarMensaje("No puedes jugar " + carta.getNombre() + " ahora: no tendria ningun efecto.");
             return;
         }
 
@@ -240,18 +245,18 @@ public class Partida {
 
     private void colocarEnBanco(Jugador jugador) {
         if (jugador.getCampo().bancoLleno()) {
-            interaccion.mostrarMensaje("Tu banco está lleno (máximo " + Campo.MAX_BANCO + " Pokémon).");
+            interaccion.mostrarMensaje("Tu banco esta lleno (maximo " + Campo.MAX_BANCO + " Pokemon).");
             return;
         }
         List<Pokemon> enMano = jugador.getPokemonEnMano();
         if (enMano.isEmpty()) {
-            interaccion.mostrarMensaje("No tienes Pokémon en la mano.");
+            interaccion.mostrarMensaje("No tienes Pokemon en la mano.");
             return;
         }
 
         List<String> opciones = resumenes(enMano);
         opciones.add("Cancelar");
-        int eleccion = interaccion.elegirOpcion("¿Qué Pokémon colocas en el banco?", opciones);
+        int eleccion = interaccion.elegirOpcion("?Que Pokemon colocas en el banco?", opciones);
         if (eleccion == enMano.size()) {
             return;
         }
@@ -267,24 +272,24 @@ public class Partida {
         Pokemon activo = campo.getActivo();
 
         if (jugador.haRetirado()) {
-            interaccion.mostrarMensaje("Ya retiraste un Pokémon en este turno.");
+            interaccion.mostrarMensaje("Ya retiraste un Pokemon en este turno.");
             return;
         }
         if (campo.getBanco().isEmpty()) {
-            interaccion.mostrarMensaje("No tienes Pokémon en el banco para reemplazar al activo.");
+            interaccion.mostrarMensaje("No tienes Pokemon en el banco para reemplazar al activo.");
             return;
         }
         int costo = jugador.getCostoRetiradaActual();
         if (activo.cantidadEnergias() < costo) {
             interaccion.mostrarMensaje(activo.getNombre() + " necesita " + costo
-                    + " energía(s) para retirarse y solo tiene " + activo.cantidadEnergias() + ".");
+                    + " energia(s) para retirarse y solo tiene " + activo.cantidadEnergias() + ".");
             return;
         }
 
         List<Pokemon> banco = campo.getBanco();
         List<String> opciones = resumenes(banco);
         opciones.add("Cancelar");
-        String titulo = "Retirar a " + activo.getNombre() + " cuesta " + costo + " energía(s). ¿Quién pasa al frente?";
+        String titulo = "Retirar a " + activo.getNombre() + " cuesta " + costo + " energia(s). ?Quien pasa al frente?";
         int eleccion = interaccion.elegirOpcion(titulo, opciones);
         if (eleccion == banco.size()) {
             return;
@@ -298,7 +303,7 @@ public class Partida {
                 + " es el nuevo activo.");
     }
 
-    /** El jugador elige qué energías descartar para pagar un costo. */
+    /** El jugador elige que energias descartar para pagar un costo. */
     private void pagarEnergias(Pokemon pokemon, int cantidad) {
         for (int i = 0; i < cantidad; i++) {
             List<Tipo> distintas = new ArrayList<>();
@@ -314,7 +319,7 @@ public class Partida {
                     opciones.add(t.getSimbolo() + " " + t.getNombre());
                 }
                 int eleccion = interaccion.elegirOpcion(
-                        "¿Qué energía descartas? (" + (i + 1) + " de " + cantidad + ")", opciones);
+                        "?Que energia descartas? (" + (i + 1) + " de " + cantidad + ")", opciones);
                 aDescartar = distintas.get(eleccion);
             }
             pokemon.descartarEnergia(aDescartar);
@@ -336,18 +341,18 @@ public class Partida {
         List<Ataque> ataques = pokemonAtacante.getAtaques();
         List<String> opciones = new ArrayList<>();
         for (Ataque a : ataques) {
-            String estado = pokemonAtacante.puedeUsar(a) ? "" : "  [energía insuficiente]";
+            String estado = pokemonAtacante.puedeUsar(a) ? "" : "  [energia insuficiente]";
             opciones.add(a + estado);
         }
         opciones.add("Cancelar");
 
-        int eleccion = interaccion.elegirOpcion("¿Con qué ataque?", opciones);
+        int eleccion = interaccion.elegirOpcion("?Con que ataque?", opciones);
         if (eleccion == ataques.size()) {
             return false;
         }
         Ataque ataque = ataques.get(eleccion);
         if (!pokemonAtacante.puedeUsar(ataque)) {
-            interaccion.mostrarMensaje("No tienes las energías necesarias para " + ataque.getNombre() + ".");
+            interaccion.mostrarMensaje("No tienes las energias necesarias para " + ataque.getNombre() + ".");
             return false;
         }
 
@@ -356,11 +361,11 @@ public class Partida {
         interaccion.mostrarMensaje(pokemonAtacante.getNombre() + " usa " + ataque.getNombre() + " contra "
                 + objetivo.getNombre() + ".");
         if (objetivo.esDebilA(pokemonAtacante.getTipo())) {
-            interaccion.mostrarMensaje("¡Es débil a " + pokemonAtacante.getTipo() + "! +"
-                    + Pokemon.BONO_DEBILIDAD + " de daño.");
+            interaccion.mostrarMensaje("!Es debil a " + pokemonAtacante.getTipo() + "! +"
+                    + Pokemon.BONO_DEBILIDAD + " de dano.");
         }
         objetivo.recibirDano(dano);
-        interaccion.mostrarMensaje(objetivo.getNombre() + " recibe " + dano + " de daño ("
+        interaccion.mostrarMensaje(objetivo.getNombre() + " recibe " + dano + " de dano ("
                 + objetivo.getPsActuales() + "/" + objetivo.getPsMaximos() + " PS).");
 
         if (objetivo.estaDerrotado()) {
@@ -369,33 +374,33 @@ public class Partida {
         return true;
     }
 
-    /** Se encarga de todo lo que pasa cuando el Pokémon activo del defensor llega a 0 PS. */
+    /** Se encarga de todo lo que pasa cuando el Pokemon activo del defensor llega a 0 PS. */
     private void resolverDerrota(Jugador atacante, Jugador defensor) {
         Pokemon derrotado = defensor.getCampo().quitarActivo();
         defensor.descartar(derrotado);
 
         int puntos = derrotado.getPuntosPremio();
         atacante.sumarPuntosPremio(puntos);
-        interaccion.mostrarMensaje("¡" + derrotado.getNombre() + " fue derrotado! " + atacante.getNombre()
+        interaccion.mostrarMensaje("!" + derrotado.getNombre() + " fue derrotado! " + atacante.getNombre()
                 + " gana " + puntos + " punto(s) de premio (" + atacante.getPuntosPremio() + "/"
                 + PUNTOS_PARA_GANAR + ").");
 
         if (atacante.getPuntosPremio() >= PUNTOS_PARA_GANAR) {
-            terminarPartida(atacante, atacante.getNombre() + " reunió " + PUNTOS_PARA_GANAR
+            terminarPartida(atacante, atacante.getNombre() + " reunio " + PUNTOS_PARA_GANAR
                     + " puntos de premio.");
             return;
         }
         if (defensor.getCampo().getBanco().isEmpty()) {
-            terminarPartida(atacante, defensor.getNombre() + " se quedó sin Pokémon en juego.");
+            terminarPartida(atacante, defensor.getNombre() + " se quedo sin Pokemon en juego.");
             return;
         }
 
         List<Pokemon> banco = defensor.getCampo().getBanco();
         int eleccion = interaccion.elegirOpcion(
-                defensor.getNombre() + ", elige el nuevo Pokémon activo:", resumenes(banco));
+                defensor.getNombre() + ", elige el nuevo Pokemon activo:", resumenes(banco));
         Pokemon nuevo = banco.get(eleccion);
         defensor.getCampo().promover(nuevo);
-        interaccion.mostrarMensaje(nuevo.getNombre() + " es el nuevo Pokémon activo de " + defensor.getNombre() + ".");
+        interaccion.mostrarMensaje(nuevo.getNombre() + " es el nuevo Pokemon activo de " + defensor.getNombre() + ".");
     }
 
     // ======================================================
