@@ -7,6 +7,8 @@ Mini proyecto de POE, Universidad del Valle.
 | Nombre | Código |
 |--------|--------|
 | Karen Elizabeth Berg Garcia | 202459506 |
+| Jerson Stiven Gonzalez | 202380397 |
+| Juan Jose Cano Gonzalez | 202459766 |
 
 ## Descripción del juego
 
