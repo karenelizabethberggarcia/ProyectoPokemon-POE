@@ -66,6 +66,18 @@ public class Campo {
         activo = delBanco;
     }
 
+    public void reemplazar(Pokemon anterior, Pokemon nuevo){
+        if(activo == anterior){
+            activo = nuevo;
+            return;
+        }
+        int posicion = banco.indexOf(anterior);
+        if(posicion < 0){
+            throw new IllegalArgumentException("Ese pokemon no esta en juego");
+        }
+        banco.set(posicion, nuevo);
+    }
+
     /** Todos los Pokemon en juego, empezando por el activo. */
     public List<Pokemon> getTodos() {
         List<Pokemon> todos = new ArrayList<>();
