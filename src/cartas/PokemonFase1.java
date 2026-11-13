@@ -14,6 +14,11 @@ public class PokemonFase1 extends PokemonEvolucion {
         return Etapa.Fase_1;
     }
 
+    @Override 
+    public Etapa getEtapaAnterior(){
+        return Etapa.BASICO;
+    }
+
 
     
 }

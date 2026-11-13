@@ -13,4 +13,9 @@ public class PokemonFase2 extends PokemonEvolucion{
     public Etapa getEtapa(){
         return Etapa.Fase_2;
     }
+
+    @Override 
+    public Etapa getEtapaAnterior(){
+        return Etapa.Fase_1;
+    }
 }

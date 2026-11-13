@@ -18,6 +18,8 @@ public abstract class Pokemon extends Carta {
     private final int costoRetirada;
     private final List<Ataque> ataques;
     private final List<Tipo> energias = new ArrayList<>();
+    private final List<Pokemon> etapasAnteriores = new ArrayList<>();
+    private int turnoColocacion;
 
     protected Pokemon(String nombre, Tipo tipo, int psMaximos, int costoRetirada, List<Ataque> ataques) {
         super(nombre);
@@ -37,7 +39,22 @@ public abstract class Pokemon extends Carta {
         return getEtapa() == Etapa.BASICO;
     }
 
-    // ---------- Datos basicos ----------
+    public List<Pokemon> getEtapasAnteriores(){
+        return Collections.unmodifiableList(etapasAnteriores);
+    }
+
+    void guardarEtapasAnteriores(Pokemon anterior){
+        etapasAnteriores.addAll(anterior.etapasAnteriores);
+        etapasAnteriores.add(anterior);
+    }
+
+    public int getTurnoColocacion(){
+        return turnoColocacion;
+    }
+
+    public void guardarColocacion(int turno){
+        turnoColocacion = turno;
+    }
 
     public Tipo getTipo() {
         return tipo;
