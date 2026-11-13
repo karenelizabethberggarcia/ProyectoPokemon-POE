@@ -13,6 +13,7 @@ public class CatalogoCartas {
     private static final String[] NOMBRES = {
         "Pikachu", "Charmander", "Squirtle", "Jigglypuff", "Magikarp", "Snorlax",
         "Mewtwo ex", "Zapdos ex", "Moltres ex", "Articuno ex",
+        "Raichu", "Charmeleon", "Charizard", "Wartortle", "Blastoise", "Wigglytuff", "Gyarados",
         "Investigacion del Profesor", "Pocion", "Poke Ball", "Turbo Velocidad", "Misty"
     };
 
@@ -38,6 +39,20 @@ public class CatalogoCartas {
             return moltresEx();
         } else if (nombre.equals("Articuno ex")) {
             return articunoEx();
+        } else if (nombre.equals("Raichu")) {
+            return raichu();
+        } else if (nombre.equals("Charmeleon")) {
+            return charmeleon();
+        } else if (nombre.equals("Charizard")) {
+            return charizard();
+        } else if (nombre.equals("Wartortle")) {
+            return wartortle();
+        } else if (nombre.equals("Blastoise")) {
+            return blastoise();
+        } else if (nombre.equals("Wigglytuff")) {
+            return wigglytuff();
+        } else if (nombre.equals("Gyarados")) {
+            return gyarados();
         } else if (nombre.equals("Investigacion del Profesor")) {
             return new InvestigacionProfesor();
         } else if (nombre.equals("Pocion")) {
@@ -126,5 +141,47 @@ public class CatalogoCartas {
         ataques.add(new Ataque("Viento Helado", Tipo.AGUA, 1, 30));
         ataques.add(new Ataque("Ventisca", Tipo.AGUA, 3, 100));
         return new PokemonEx("Articuno ex", Tipo.AGUA, 130, 2, ataques);
+    }
+
+    public static Pokemon raichu(){
+        List<Ataque> ataques = new ArrayList<>();
+        ataques.add(new Ataque("Trueno", Tipo.ELECTRICO, 2, 60));
+        return new PokemonFase1("Raichu", Tipo.ELECTRICO, 100, 1, ataques, "Pikachu");
+    }
+
+    public static Pokemon charmeleon(){
+        List<Ataque> ataques = new ArrayList<>();
+        ataques.add(new Ataque("Garra Ignea", Tipo.FUEGO, 2, 50));
+        return new PokemonFase1("Charmeleon", Tipo.FUEGO, 90, 2, ataques, "Charmander");
+    }
+
+    public static Pokemon charizard(){
+        List<Ataque> ataques = new ArrayList<>();
+        ataques.add(new Ataque("Giro Fuego", Tipo.FUEGO, 4, 120));
+        return new PokemonFase2("Charizard", Tipo.FUEGO, 150, 2, ataques, "Charmeleon");
+    }
+
+    public static Pokemon wartortle(){
+        List<Ataque> ataques = new ArrayList<>();
+        ataques.add(new Ataque("Salpicadura", Tipo.AGUA, 2, 40));
+        return new PokemonFase1("Wartortle", Tipo.AGUA, 80, 1, ataques, "Squirtle");
+    }
+
+    public static Pokemon blastoise(){
+        List<Ataque> ataques = new ArrayList<>();
+        ataques.add(new Ataque("Hidrobomba", Tipo.AGUA, 3, 100));
+        return new PokemonFase2("Blastoise", Tipo.AGUA, 150, 3, ataques, "Wartortle");
+    }
+
+    public static Pokemon wigglytuff(){
+        List<Ataque> ataques = new ArrayList<>();
+        ataques.add(new Ataque("Bofeton", Tipo.INCOLORO, 2, 50));
+        return new PokemonFase1("Wigglytuff", Tipo.INCOLORO, 110, 2, ataques, "Jigglypuff");
+    }
+
+    public static Pokemon gyarados(){
+        List<Ataque> ataques = new ArrayList<>();
+        ataques.add(new Ataque("Hiperrayo", Tipo.AGUA, 4, 100));
+        return new PokemonFase1("Gyarados", Tipo.AGUA, 150, 4, ataques, "Magikarp");
     }
 }
