@@ -14,6 +14,10 @@ public class PokemonEx extends Pokemon {
         return 2;
     }
 
+    @Override 
+    public Etapa getEtapa(){
+        return Etapa.BASICO;
+    }
     @Override
     public String getDescripcion() {
         return super.getDescripcion() + " (Pokemon-ex, vale 2 puntos de premio)";

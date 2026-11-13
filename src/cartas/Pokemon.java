@@ -31,6 +31,12 @@ public abstract class Pokemon extends Carta {
     /** Puntos de premio que recibe el rival cuando este Pokemon es derrotado. */
     public abstract int getPuntosPremio();
 
+    public abstract Etapa getEtapa();
+
+    public boolean esBasico(){
+        return getEtapa() == Etapa.BASICO;
+    }
+
     // ---------- Datos basicos ----------
 
     public Tipo getTipo() {
