@@ -269,7 +269,7 @@ public class Partida {
         Pokemon elegido = enMano.get(eleccion);
         jugador.quitarDeMano(elegido);
         jugador.getCampo().agregarABanco(elegido);
-        elegido.registrarColocacion(numeroTurno);
+        elegido.guardarColocacion(numeroTurno);
         interaccion.mostrarMensaje(elegido.getNombre() + " pasa al banco.");
     }
 
