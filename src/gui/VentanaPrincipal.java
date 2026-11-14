@@ -1,8 +1,11 @@
 package gui;
 
+import juego.Jugador;
+import juego.MazosPredefinidos;
 import juego.Partida;
 import java.awt.CardLayout;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
@@ -70,12 +73,29 @@ public class VentanaPrincipal extends JFrame {
     public void iniciarPartida(String nombre1, String nombre2, int indiceMazo1, int indiceMazo2) {
         areaRegistro.setText(""); // Limpiar el área de registro al iniciar una nueva partida
 
-        // PRUEBA TEMPORAL (Etapa 1): comprobar que PanelInicio manda bien los datos.
-        // Se reemplaza en la Etapa 2, cuando conectemos la Partida real.
-        javax.swing.JOptionPane.showMessageDialog(this,
-                nombre1 + " (" + juego.MazosPredefinidos.getNombre(indiceMazo1) + ")\n"
-                + "contra\n"
-                + nombre2 + " (" + juego.MazosPredefinidos.getNombre(indiceMazo2) + ")");
+        Jugador jugador1 = new Jugador(nombre1, MazosPredefinidos.crear(indiceMazo1));
+        Jugador jugador2 = new Jugador(nombre2, MazosPredefinidos.crear(indiceMazo2));
+        this.partidaActual = new Partida(jugador1, jugador2, interaccionSwing);
+
+        mostrarTablero();
+
+        // La partida corre en su propio hilo: asi, cuando espera una respuesta
+        // del jugador, la ventana sigue respondiendo y no se congela.
+        Thread hilo = new Thread(() -> {
+            try {
+                partidaActual.jugar();
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+                SwingUtilities.invokeLater(() -> {
+                    JOptionPane.showMessageDialog(this,
+                            "La partida terminó por un error: " + e.getMessage(),
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    mostrarInicio();
+                });
+            }
+        }, "hilo-partida");
+        hilo.setDaemon(true); // no impide cerrar el programa
+        hilo.start();
     }
 
     public void mostrarTransicion() {
@@ -115,6 +135,4 @@ public class VentanaPrincipal extends JFrame {
         });
     }
 }   
-
-
 
