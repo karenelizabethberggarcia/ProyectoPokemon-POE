@@ -1,12 +1,11 @@
 package gui;
 
-import javax.swing.SwingUtilities;
 import juego.Partida;
 import java.awt.CardLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-
+import javax.swing.SwingUtilities;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -70,11 +69,13 @@ public class VentanaPrincipal extends JFrame {
 
     public void iniciarPartida(String nombre1, String nombre2, int indiceMazo1, int indiceMazo2) {
         areaRegistro.setText(""); // Limpiar el área de registro al iniciar una nueva partida
-        
-     //   this.partidaActual = new Partida(nombre1, nombre2, indiceMazo1, indiceMazo2, interaccionSwing);
-        //this.interaccionSwing.setPartida(partidaActual);
-        mostrarTransicion();
-    
+
+        // PRUEBA TEMPORAL (Etapa 1): comprobar que PanelInicio manda bien los datos.
+        // Se reemplaza en la Etapa 2, cuando conectemos la Partida real.
+        javax.swing.JOptionPane.showMessageDialog(this,
+                nombre1 + " (" + juego.MazosPredefinidos.getNombre(indiceMazo1) + ")\n"
+                + "contra\n"
+                + nombre2 + " (" + juego.MazosPredefinidos.getNombre(indiceMazo2) + ")");
     }
 
     public void mostrarTransicion() {
