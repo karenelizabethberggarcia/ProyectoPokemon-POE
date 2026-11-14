@@ -96,7 +96,7 @@ public class Partida {
         jugador.getMazo().barajar();
         jugador.robarCartas(CARTAS_INICIALES);
 
-        while (jugador.getPokemonEnMano().isEmpty()) {
+        while (jugador.getBasicosMano().isEmpty()) {
             interaccion.mostrarMensaje(jugador.getNombre()
                     + " no tiene Pokemon basicos en su mano inicial: mulligan.");
             jugador.devolverManoAlMazo();
@@ -110,7 +110,7 @@ public class Partida {
         interaccion.esperarContinuar("Preparacion del campo de " + jugador.getNombre() + ".");
         interaccion.mostrarMensaje("Tu mano: " + nombresDeCartas(jugador.getMano()));
 
-        List<Pokemon> disponibles = jugador.getPokemonEnMano();
+        List<Pokemon> disponibles = jugador.getBasicosMano();
         int eleccion = interaccion.elegirOpcion(jugador.getNombre() + ", elige tu Pokemon activo:",
                 resumenes(disponibles));
         Pokemon activo = disponibles.get(eleccion);
@@ -118,7 +118,7 @@ public class Partida {
         jugador.getCampo().colocarActivo(activo);
 
         while (!jugador.getCampo().bancoLleno()) {
-            List<Pokemon> restantes = jugador.getPokemonEnMano();
+            List<Pokemon> restantes = jugador.getBasicosMano();
             if (restantes.isEmpty()) {
                 break;
             }
@@ -253,9 +253,9 @@ public class Partida {
             interaccion.mostrarMensaje("Tu banco esta lleno (maximo " + Campo.MAX_BANCO + " Pokemon).");
             return;
         }
-        List<Pokemon> enMano = jugador.getPokemonEnMano();
+        List<Pokemon> enMano = jugador.getBasicosMano();
         if (enMano.isEmpty()) {
-            interaccion.mostrarMensaje("No tienes Pokemon en la mano.");
+            interaccion.mostrarMensaje("No tienes Pokemones basicos en la mano.");
             return;
         }
 
@@ -278,7 +278,7 @@ public class Partida {
             return "No puedes evolucionar en tu primer turno";
         }
         if(!evolucion.puedeEvolucionarDe(objetivo)){
-            return evolucion.getNombre() + " solo se coloca sobre " + evolucion.evoluvionaDe()
+            return evolucion.getNombre() + " solo se coloca sobre " + evolucion.evolucionaDe()
                     + " (" + evolucion.getEtapaAnterior() + ")";
         }
         if(objetivo.getTurnoColocacion() == numeroTurno){
@@ -291,7 +291,7 @@ public class Partida {
     }
 
     private void evolucionar(Jugador jugador){
-        List<PokemonEvolucion> evoluciones = jugador.getEvoluvionesMano();
+        List<PokemonEvolucion> evoluciones = jugador.getEvolucionesMano();
         if(evoluciones.isEmpty()){
             interaccion.mostrarMensaje("No tienes cartas de evolucion en mano");
             return;
@@ -302,7 +302,7 @@ public class Partida {
         }
         List<String> opcionesCarta = new ArrayList<>();
         for(PokemonEvolucion e : evoluciones){
-            opcionesCarta.add(e.getResumen() + " (" + e.getEtapa() + " evoluciona de " + e.evoluvionaDe() + ")");
+            opcionesCarta.add(e.getResumen() + " (" + e.getEtapa() + " evoluciona de " + e.evolucionaDe() + ")");
         }
         opcionesCarta.add("Cancelar");
         int eleccionCarta = interaccion.elegirOpcion("¿Que carta de evolucion juegas?", opcionesCarta);

@@ -105,17 +105,17 @@ public class Jugador {
         descarte.add(carta);
     }
 
-    public List<Pokemon> getPokemonEnMano() {
+    public List<Pokemon> getBasicosMano() {
         List<Pokemon> resultado = new ArrayList<>();
         for (Carta c : mano) {
-            if (c instanceof Pokemon) {
+            if (c instanceof Pokemon && ((Pokemon) c).esBasico()) {
                 resultado.add((Pokemon) c);
             }
         }
         return resultado;
     }
 
-    public List<PokemonEvolucion> getEvoluvionesMano(){
+    public List<PokemonEvolucion> getEvolucionesMano(){
         List<PokemonEvolucion> resultado = new ArrayList<>();
         for(Carta c : mano){
             if(c instanceof PokemonEvolucion){
@@ -159,7 +159,7 @@ public class Jugador {
     // ---------- Estado del turno ----------
 
     public void iniciarTurno() {
-        turnosJugados ++;
+        turnosJugados++;
         soporteJugado = false;
         haRetirado = false;
         reduccionRetirada = 0;
