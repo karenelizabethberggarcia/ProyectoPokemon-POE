@@ -14,14 +14,8 @@ import juego.Interaccion;
 import juego.Jugador;
 
 
-/**
- * Puente entre la logica del juego (Partida) y la ventana.
- *
- * Partida corre en su propio hilo y llama a estos metodos. Los que piden
- * algo al jugador (elegirOpcion, esperarContinuar, mostrarGanador) abren una
- * ventana en el hilo grafico y hacen esperar al hilo de la partida hasta que
- * el jugador responda. Asi la ventana nunca se congela.
- */
+// Puente entre la logica del juego (Partida) y la ventana.
+
 public class InteraccionSwing implements Interaccion {
 
     private static final String LINEA = "============================================================";
@@ -93,18 +87,6 @@ public class InteraccionSwing implements Interaccion {
         });
     }
 
-    // ======================================================
-    //  Ventanas auxiliares (siempre se crean en el hilo grafico)
-    // ======================================================
-
-    // ======================================================
-    //  Utilidades
-    // ======================================================
-
-    /**
-     * Ejecuta algo en el hilo grafico y espera su resultado. Es lo que hace
-     * esperar al hilo de la partida mientras el jugador decide.
-     */
     private <T> T enHiloGrafico(Supplier<T> tarea) {
         if (SwingUtilities.isEventDispatchThread()) {
             return tarea.get();
