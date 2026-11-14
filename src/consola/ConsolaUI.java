@@ -36,7 +36,7 @@ public class ConsolaUI implements Interaccion {
 
     public void mostrarBienvenida() {
         salida.println(LINEA);
-        salida.println("  POKEMON TCG POCKET )");
+        salida.println("  POKEMON TCG POCKET ");
         salida.println(LINEA);
         salida.println("Gana el primero que consiga " + Partida.PUNTOS_PARA_GANAR + " puntos de premio.");
     }
