@@ -72,6 +72,7 @@ public class VentanaPrincipal extends JFrame {
 
     public void iniciarPartida(String nombre1, String nombre2, int indiceMazo1, int indiceMazo2) {
         areaRegistro.setText(""); // Limpiar el área de registro al iniciar una nueva partida
+        panelTablero.reiniciar();
 
         Jugador jugador1 = new Jugador(nombre1, MazosPredefinidos.crear(indiceMazo1));
         Jugador jugador2 = new Jugador(nombre2, MazosPredefinidos.crear(indiceMazo2));
@@ -123,6 +124,10 @@ public class VentanaPrincipal extends JFrame {
         return areaRegistro;
     }
 
+    public PanelTablero getPanelTablero() {
+        return panelTablero;
+    }
+
     public InteraccionSwing getInteraccionSwing() {
         return interaccionSwing;
     }
@@ -135,4 +140,6 @@ public class VentanaPrincipal extends JFrame {
         });
     }
 }   
+
+
 

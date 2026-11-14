@@ -1,29 +1,18 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.function.Supplier;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
 
-import cartas.Carta;
-import cartas.Pokemon;
-import cartas.Tipo;
 import juego.Interaccion;
 import juego.Jugador;
-import juego.Partida;
+
 
 /**
  * Puente entre la logica del juego (Partida) y la ventana.
@@ -36,10 +25,12 @@ import juego.Partida;
 public class InteraccionSwing implements Interaccion {
 
     private static final String LINEA = "============================================================";
-    private static final int ANCHO_BARRA = 10;
 
     private final VentanaPrincipal ventana;
     private final JTextArea areaRegistro;
+
+    /** Aqui deja el tablero la opcion que pulso el jugador. */
+    private final BlockingQueue<Integer> respuesta = new ArrayBlockingQueue<>(1);
 
     public InteraccionSwing(VentanaPrincipal ventana, JTextArea areaRegistro) {
         this.ventana = ventana;
@@ -52,7 +43,18 @@ public class InteraccionSwing implements Interaccion {
 
     @Override
     public int elegirOpcion(String titulo, List<String> opciones) {
-        return enHiloGrafico(() -> mostrarDialogoOpciones(titulo, opciones));
+        respuesta.clear();
+        List<String> copia = new ArrayList<>(opciones);
+        // Los botones se crean en el hilo grafico...
+        SwingUtilities.invokeLater(() -> ventana.getPanelTablero()
+                .mostrarOpciones(titulo, copia, indice -> respuesta.offer(indice)));
+        // ...y el hilo de la partida espera aqui hasta que el jugador pulse uno.
+        try {
+            return respuesta.take();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("La partida fue interrumpida.", e);
+        }
     }
 
     @Override
@@ -64,40 +66,17 @@ public class InteraccionSwing implements Interaccion {
     public void esperarContinuar(String mensaje) {
         agregarAlRegistro("");
         agregarAlRegistro(mensaje);
-        enHiloGrafico(() -> {
-            JOptionPane.showMessageDialog(ventana, mensaje, "Continuar", JOptionPane.INFORMATION_MESSAGE);
-            return null;
-        });
+        elegirOpcion(mensaje, List.of("Continuar"));
     }
 
     @Override
     public void mostrarTablero(int turno, Jugador actual, Jugador rival) {
-        StringBuilder t = new StringBuilder();
-        t.append("\n").append(LINEA).append("\n");
-        t.append("TURNO ").append(turno).append(" - ").append(actual.getNombre()).append("\n");
-        t.append(LINEA).append("\n");
-
-        textoCampo(t, "RIVAL (" + rival.getNombre() + ")", rival);
-        t.append("Puntos de premio rival: ").append(rival.getPuntosPremio())
-                .append("/").append(Partida.PUNTOS_PARA_GANAR).append("\n\n");
-
-        textoCampo(t, "TU CAMPO (" + actual.getNombre() + ")", actual);
-        t.append("Puntos de premio propios: ").append(actual.getPuntosPremio())
-                .append("/").append(Partida.PUNTOS_PARA_GANAR).append("\n\n");
-
-        Tipo zona = actual.getEnergiaZona();
-        if (zona == null) {
-            t.append("Zona de energia: vacia (ya usaste la de este turno)\n");
-        } else {
-            t.append("Zona de energia: ").append(zona.getSimbolo()).append(" (disponible)\n");
-        }
-
-        List<Carta> mano = actual.getMano();
-        t.append("Tu mano (").append(mano.size()).append(" cartas):\n");
-        for (int i = 0; i < mano.size(); i++) {
-            t.append(i + 1).append(". ").append(mano.get(i).getNombre()).append("\n");
-        }
-        agregarAlRegistro(t.toString());
+        agregarAlRegistro("--- Turno " + turno + ": " + actual.getNombre() + " ---");
+        // Se espera a que termine de dibujarse antes de seguir con la partida
+        enHiloGrafico(() -> {
+            ventana.getPanelTablero().actualizarVista(turno, actual, rival);
+            return null;
+        });
     }
 
     @Override
@@ -117,39 +96,6 @@ public class InteraccionSwing implements Interaccion {
     // ======================================================
     //  Ventanas auxiliares (siempre se crean en el hilo grafico)
     // ======================================================
-
-    /** Dialogo con un boton por opcion. No se puede cerrar sin elegir una. */
-    private int mostrarDialogoOpciones(String titulo, List<String> opciones) {
-        JDialog dialogo = new JDialog(ventana, "Elige una opcion", true);
-        dialogo.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        int[] elegido = {-1};
-
-        JPanel botones = new JPanel(new GridLayout(0, 1, 0, 6));
-        botones.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
-        for (int i = 0; i < opciones.size(); i++) {
-            final int posicion = i;
-            JButton boton = new JButton(opciones.get(i));
-            boton.addActionListener(e -> {
-                elegido[0] = posicion;
-                dialogo.dispose();
-            });
-            botones.add(boton);
-        }
-
-        JLabel etiqueta = new JLabel("<html>" + titulo + "</html>");
-        etiqueta.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
-
-        JScrollPane scroll = new JScrollPane(botones);
-        scroll.setBorder(null);
-        scroll.setPreferredSize(new Dimension(520, Math.min(40 * opciones.size() + 30, 420)));
-
-        dialogo.add(etiqueta, BorderLayout.NORTH);
-        dialogo.add(scroll, BorderLayout.CENTER);
-        dialogo.pack();
-        dialogo.setLocationRelativeTo(ventana);
-        dialogo.setVisible(true); // espera aqui hasta que se pulse un boton
-        return elegido[0];
-    }
 
     // ======================================================
     //  Utilidades
@@ -182,47 +128,5 @@ public class InteraccionSwing implements Interaccion {
             areaRegistro.append(texto + "\n");
             areaRegistro.setCaretPosition(areaRegistro.getDocument().getLength());
         });
-    }
-
-    private void textoCampo(StringBuilder t, String titulo, Jugador jugador) {
-        Pokemon activo = jugador.getCampo().getActivo();
-        if (activo == null) {
-            t.append(titulo).append("  (sin Pokemon activo)\n");
-        } else {
-            t.append(titulo).append("  PS: ").append(barraDeVida(activo)).append(" ")
-                    .append(activo.getPsActuales()).append("/").append(activo.getPsMaximos()).append("\n");
-            t.append("[Activo] ").append(activo.getNombre())
-                    .append("   Energia adjunta: ").append(energiasComoTexto(activo)).append("\n");
-        }
-
-        List<Pokemon> banco = jugador.getCampo().getBanco();
-        if (banco.isEmpty()) {
-            t.append("[Banco] (vacio)\n");
-        } else {
-            List<String> textos = new ArrayList<>();
-            for (Pokemon p : banco) {
-                textos.add(p.getNombre() + " (" + p.getPsActuales() + " PS)");
-            }
-            t.append("[Banco] ").append(String.join("   ", textos)).append("\n");
-        }
-    }
-
-    private String barraDeVida(Pokemon pokemon) {
-        int llenos = (int) Math.ceil((double) pokemon.getPsActuales() * ANCHO_BARRA / pokemon.getPsMaximos());
-        llenos = Math.max(0, Math.min(ANCHO_BARRA, llenos));
-        return "#".repeat(llenos) + ".".repeat(ANCHO_BARRA - llenos);
-    }
-
-    private String energiasComoTexto(Pokemon pokemon) {
-        List<Tipo> energias = new ArrayList<>(pokemon.getEnergias());
-        if (energias.isEmpty()) {
-            return "ninguna";
-        }
-        java.util.Collections.sort(energias);
-        StringBuilder texto = new StringBuilder();
-        for (Tipo tipo : energias) {
-            texto.append(tipo.getSimbolo());
-        }
-        return texto.toString();
     }
 }
