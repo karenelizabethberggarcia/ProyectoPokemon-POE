@@ -12,7 +12,7 @@ public abstract class PokemonEvolucion extends Pokemon {
         this.evolucionaDe = evolucionaDe;
     }
 
-    public String evoluvionaDe(){
+    public String evolucionaDe(){
         return evolucionaDe;
     }
 
