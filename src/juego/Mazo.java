@@ -53,7 +53,7 @@ public class Mazo {
             } else {
                 copias.put(nombre, 1);
             }
-            if (c instanceof Pokemon) {
+            if (c instanceof Pokemon && ((Pokemon) c).esBasico()) {
                 pokemon++;
             }
         }
@@ -124,10 +124,10 @@ public class Mazo {
     }
 
     /** Pokemon que quedan en el mazo (para la Poke Ball). */
-    public List<Pokemon> getPokemon() {
+    public List<Pokemon> getPokemonesBasicos() {
         List<Pokemon> resultado = new ArrayList<>();
         for (Carta c : cartas) {
-            if (c instanceof Pokemon) {
+            if (c instanceof Pokemon && ((Pokemon) c).esBasico()) {
                 resultado.add((Pokemon) c);
             }
         }

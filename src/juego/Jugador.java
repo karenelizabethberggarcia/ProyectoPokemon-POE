@@ -8,6 +8,7 @@ import java.util.Random;
 import cartas.Carta;
 import cartas.Entrenador;
 import cartas.Pokemon;
+import cartas.PokemonEvolucion;
 import cartas.Tipo;
 
 /**
@@ -23,6 +24,7 @@ public class Jugador {
 
     private int puntosPremio = 0;
     private Tipo energiaZona;
+    private int turnosJugados = 0;
 
     // Estado que se reinicia en cada turno
     private boolean soporteJugado;
@@ -103,11 +105,21 @@ public class Jugador {
         descarte.add(carta);
     }
 
-    public List<Pokemon> getPokemonEnMano() {
+    public List<Pokemon> getBasicosMano() {
         List<Pokemon> resultado = new ArrayList<>();
         for (Carta c : mano) {
-            if (c instanceof Pokemon) {
+            if (c instanceof Pokemon && ((Pokemon) c).esBasico()) {
                 resultado.add((Pokemon) c);
+            }
+        }
+        return resultado;
+    }
+
+    public List<PokemonEvolucion> getEvolucionesMano(){
+        List<PokemonEvolucion> resultado = new ArrayList<>();
+        for(Carta c : mano){
+            if(c instanceof PokemonEvolucion){
+                resultado.add((PokemonEvolucion) c);
             }
         }
         return resultado;
@@ -147,6 +159,7 @@ public class Jugador {
     // ---------- Estado del turno ----------
 
     public void iniciarTurno() {
+        turnosJugados++;
         soporteJugado = false;
         haRetirado = false;
         reduccionRetirada = 0;
@@ -154,6 +167,10 @@ public class Jugador {
 
     public void terminarTurno() {
         reduccionRetirada = 0;
+    }
+
+    public int getTurnosJugados(){
+        return turnosJugados;
     }
 
     public boolean haJugadoSoporte() {

@@ -8,6 +8,7 @@ import cartas.Ataque;
 import cartas.Carta;
 import cartas.Entrenador;
 import cartas.Pokemon;
+import cartas.PokemonEvolucion;
 import cartas.Tipo;
 import consola.ConsolaUI;
 
@@ -24,6 +25,7 @@ public class Partida {
         "Adjuntar energia de zona",
         "Jugar carta de entrenador",
         "Colocar Pokemon en banco",
+        "Evolucionar Pokemon",
         "Retirar Pokemon activo",
         "Atacar",
         "Pasar turno"
@@ -94,7 +96,7 @@ public class Partida {
         jugador.getMazo().barajar();
         jugador.robarCartas(CARTAS_INICIALES);
 
-        while (jugador.getPokemonEnMano().isEmpty()) {
+        while (jugador.getBasicosMano().isEmpty()) {
             interaccion.mostrarMensaje(jugador.getNombre()
                     + " no tiene Pokemon basicos en su mano inicial: mulligan.");
             jugador.devolverManoAlMazo();
@@ -108,7 +110,7 @@ public class Partida {
         interaccion.esperarContinuar("Preparacion del campo de " + jugador.getNombre() + ".");
         interaccion.mostrarMensaje("Tu mano: " + nombresDeCartas(jugador.getMano()));
 
-        List<Pokemon> disponibles = jugador.getPokemonEnMano();
+        List<Pokemon> disponibles = jugador.getBasicosMano();
         int eleccion = interaccion.elegirOpcion(jugador.getNombre() + ", elige tu Pokemon activo:",
                 resumenes(disponibles));
         Pokemon activo = disponibles.get(eleccion);
@@ -116,7 +118,7 @@ public class Partida {
         jugador.getCampo().colocarActivo(activo);
 
         while (!jugador.getCampo().bancoLleno()) {
-            List<Pokemon> restantes = jugador.getPokemonEnMano();
+            List<Pokemon> restantes = jugador.getBasicosMano();
             if (restantes.isEmpty()) {
                 break;
             }
@@ -152,7 +154,7 @@ public class Partida {
         boolean turnoTerminado = false;
         while (!turnoTerminado && ganador == null) {
             interaccion.mostrarTablero(numeroTurno, actual, rival);
-            int opcion = interaccion.elegirOpcion("?Que deseas hacer?", menuTurno);
+            int opcion = interaccion.elegirOpcion("¿Que deseas hacer?", menuTurno);
             switch (opcion) {
                 case 0:
                     adjuntarEnergia(actual);
@@ -162,14 +164,17 @@ public class Partida {
                     break;
                 case 2:
                     colocarEnBanco(actual);
-                    break;
+                    break;                    
                 case 3:
+                    evolucionar(actual);
+                    break; 
+                case 4:
                     retirarActivo(actual);
                     break;
-                case 4:
+                case 5:
                     turnoTerminado = atacar(actual, rival);
                     break;
-                case 5:
+                case 6:
                     turnoTerminado = true;
                     break;
                 default:
@@ -248,9 +253,9 @@ public class Partida {
             interaccion.mostrarMensaje("Tu banco esta lleno (maximo " + Campo.MAX_BANCO + " Pokemon).");
             return;
         }
-        List<Pokemon> enMano = jugador.getPokemonEnMano();
+        List<Pokemon> enMano = jugador.getBasicosMano();
         if (enMano.isEmpty()) {
-            interaccion.mostrarMensaje("No tienes Pokemon en la mano.");
+            interaccion.mostrarMensaje("No tienes Pokemones basicos en la mano.");
             return;
         }
 
@@ -264,7 +269,73 @@ public class Partida {
         Pokemon elegido = enMano.get(eleccion);
         jugador.quitarDeMano(elegido);
         jugador.getCampo().agregarABanco(elegido);
+        elegido.guardarColocacion(numeroTurno);
         interaccion.mostrarMensaje(elegido.getNombre() + " pasa al banco.");
+    }
+
+    public String errorNoEvolucion(Jugador jugador, PokemonEvolucion evolucion, Pokemon objetivo){
+        if(jugador.getTurnosJugados() <= 1){
+            return "No puedes evolucionar en tu primer turno";
+        }
+        if(!evolucion.puedeEvolucionarDe(objetivo)){
+            return evolucion.getNombre() + " solo se coloca sobre " + evolucion.evolucionaDe()
+                    + " (" + evolucion.getEtapaAnterior() + ")";
+        }
+        if(objetivo.getTurnoColocacion() == numeroTurno){
+            if(objetivo.esBasico()){
+                return objetivo.getNombre() + " entro en juego este turno";
+            }
+            return objetivo.getNombre() + " ya evoluciono este turno";
+        }
+        return  null;
+    }
+
+    private void evolucionar(Jugador jugador){
+        List<PokemonEvolucion> evoluciones = jugador.getEvolucionesMano();
+        if(evoluciones.isEmpty()){
+            interaccion.mostrarMensaje("No tienes cartas de evolucion en mano");
+            return;
+        }
+        if(jugador.getTurnosJugados() <= 1){
+            interaccion.mostrarMensaje("No puedes evolucionar en tu primer turno");
+            return;
+        }
+        List<String> opcionesCarta = new ArrayList<>();
+        for(PokemonEvolucion e : evoluciones){
+            opcionesCarta.add(e.getResumen() + " (" + e.getEtapa() + " evoluciona de " + e.evolucionaDe() + ")");
+        }
+        opcionesCarta.add("Cancelar");
+        int eleccionCarta = interaccion.elegirOpcion("¿Que carta de evolucion juegas?", opcionesCarta);
+        if(eleccionCarta == evoluciones.size()){
+            return;
+        }
+        PokemonEvolucion evolucion = evoluciones.get(eleccionCarta);
+        List<Pokemon> enJuego = jugador.getCampo().getTodos();
+        List<String> opcionesObjetivo = new ArrayList<>();
+        for(Pokemon p : enJuego){
+            String lugar = (p ==jugador.getCampo().getActivo() ? "[Activo]" : "[Banco]");
+            String motivo = errorNoEvolucion(jugador, evolucion, p);
+            opcionesObjetivo.add(lugar + p.getResumen() + (motivo == null ? "" : " [No disponible]"));   
+        }
+        opcionesObjetivo.add("Cancelar");
+        int eleccionObjetivo = interaccion.elegirOpcion("¿Sobre que pokemon colocas a "
+        + evolucion.getNombre() + "?", opcionesObjetivo);
+        if(eleccionObjetivo == enJuego.size()){
+            return;
+        }
+        Pokemon objetivo = enJuego.get(eleccionObjetivo);
+        String motivo = errorNoEvolucion(jugador, evolucion, objetivo);
+        if(motivo != null){
+            interaccion.mostrarMensaje(motivo);
+            return;
+        }
+        jugador.quitarDeMano(evolucion);
+        evolucion.evolucionarSobre(objetivo);
+        jugador.getCampo().reemplazar(objetivo, evolucion);
+        evolucion.guardarColocacion(numeroTurno);
+        interaccion.mostrarMensaje(objetivo.getNombre() + " evoluciona a " + evolucion.getNombre() + "!"
+                    + " (" + evolucion.getPsActuales() + "/" + evolucion.getPsMaximos() + "Ps, "
+                    + evolucion.cantidadEnergias() + " energias adjuntas)");
     }
 
     private void retirarActivo(Jugador jugador) {
@@ -346,7 +417,7 @@ public class Partida {
         }
         opciones.add("Cancelar");
 
-        int eleccion = interaccion.elegirOpcion("?Con que ataque?", opciones);
+        int eleccion = interaccion.elegirOpcion("¿Con que ataque?", opciones);
         if (eleccion == ataques.size()) {
             return false;
         }
@@ -378,6 +449,9 @@ public class Partida {
     private void resolverDerrota(Jugador atacante, Jugador defensor) {
         Pokemon derrotado = defensor.getCampo().quitarActivo();
         defensor.descartar(derrotado);
+        for(Pokemon previo : derrotado.getEtapasAnteriores()){
+            defensor.descartar(previo);
+        }
 
         int puntos = derrotado.getPuntosPremio();
         atacante.sumarPuntosPremio(puntos);

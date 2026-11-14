@@ -20,10 +20,10 @@ public class MazosPredefinidos {
     };
 
     private static final String[] DESCRIPCIONES = {
-        "Mewtwo ex y Zapdos ex, con energia psiquica, electrica y de fuego",
-        "Pikachu y Zapdos ex, con energia electrica y de agua",
-        "Moltres ex y Charmander, con energia de fuego y de agua",
-        "Articuno ex y compania, solo energia de agua"
+        "Mewtwo ex, Zapdos ex y Pikachu->Raichu, con energia psiquica, electrica y de fuego",
+        "Pikachu->Raichu y Zapdos ex, con energia electrica y de agua",
+        "Moltres ex y Charmander->Charmeleon->Charizard, con energia de fuego y de agua",
+        "Articuno ex, Squirtle->Wartortle->Blastoise y Magikarp->Gyarados, solo energia de agua"
     };
 
     public static int cantidad() {
@@ -46,34 +46,36 @@ public class MazosPredefinidos {
             agregar(cartas, "Mewtwo ex", 2);
             agregar(cartas, "Zapdos ex", 2);
             agregar(cartas, "Pikachu", 2);
+            agregar(cartas, "Raichu", 2);
             agregar(cartas, "Charmander", 2);
-            agregar(cartas, "Jigglypuff", 2);
-            agregar(cartas, "Snorlax", 2);
+            agregar(cartas, "Jigglypuff", 1);
+            agregar(cartas, "Wigglytuff", 1);
             agregarEntrenadoresBasicos(cartas);
         } else if (indice == 1) {
             agregar(cartas, "Pikachu", 2);
+            agregar(cartas, "Raichu", 2);
             agregar(cartas, "Zapdos ex", 2);
             agregar(cartas, "Squirtle", 2);
             agregar(cartas, "Magikarp", 2);
-            agregar(cartas, "Jigglypuff", 2);
             agregarEntrenadoresBasicos(cartas);
             agregar(cartas, "Misty", 2);
         } else if (indice == 2) {
             agregar(cartas, "Moltres ex", 2);
             agregar(cartas, "Charmander", 2);
+            agregar(cartas, "Charmeleon", 2);
+            agregar(cartas, "Charizard", 2);
             agregar(cartas, "Squirtle", 2);
             agregar(cartas, "Jigglypuff", 2);
-            agregar(cartas, "Snorlax", 2);
             agregarEntrenadoresBasicos(cartas);
-            agregar(cartas, "Misty", 2);
         } else if (indice == 3) {
             agregar(cartas, "Articuno ex", 2);
             agregar(cartas, "Squirtle", 2);
+            agregar(cartas, "Wartortle", 2);
+            agregar(cartas, "Blastoise", 1);
             agregar(cartas, "Magikarp", 2);
+            agregar(cartas, "Gyarados", 1);
             agregar(cartas, "Jigglypuff", 2);
-            agregar(cartas, "Snorlax", 2);
             agregarEntrenadoresBasicos(cartas);
-            agregar(cartas, "Misty", 2);
         } else {
             throw new IllegalArgumentException("No existe el mazo " + indice);
         }

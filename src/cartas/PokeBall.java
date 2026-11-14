@@ -16,7 +16,7 @@ public class PokeBall extends Objeto {
 
     @Override
     public boolean puedeActivarse(Jugador jugador) {
-        return !jugador.getMazo().getPokemon().isEmpty();
+        return !jugador.getMazo().getPokemonesBasicos().isEmpty();
     }
 
     @Override
@@ -24,7 +24,7 @@ public class PokeBall extends Objeto {
         // Si hay copias repetidas en el mazo solo mostramos una de cada nombre
         List<Pokemon> candidatos = new ArrayList<>();
         Set<String> nombresVistos = new HashSet<>();
-        for (Pokemon p : jugador.getMazo().getPokemon()) {
+        for (Pokemon p : jugador.getMazo().getPokemonesBasicos()) {
             if (nombresVistos.add(p.getNombre())) {
                 candidatos.add(p);
             }

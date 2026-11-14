@@ -13,4 +13,9 @@ public class PokemonBasico extends Pokemon {
     public int getPuntosPremio() {
         return 1;
     }
+
+    @Override
+    public Etapa getEtapa(){
+        return Etapa.BASICO;
+    }
 }
