@@ -12,7 +12,7 @@ Mini proyecto de POE, Universidad del Valle.
 
 ## Descripción del juego
 
-Simulación por consola, para dos jugadores en el mismo computador, del juego de cartas
+Interfaz gráfica Swing para dos jugadores en el mismo computador del juego de cartas
 Pokémon TCG Pocket con las cartas de la expansión Genetic Apex (10 Pokémon y 5 cartas de entrenador).
 
 Cada jugador arma su campo con un Pokémon activo y hasta 2 en el banco, y se turnan para
@@ -27,7 +27,7 @@ adjuntar energías, jugar cartas de entrenador, retirar Pokémon y atacar. Gana 
 - Java 21 (JDK)
 ## Cómo se juega
 
-1. Se escriben los nombres de los entrenadores (ENTER deja el nombre por defecto).
+1. En la pantalla inicial se escriben los nombres de los entrenadores.
 2. Cada uno elige uno de los 4 mazos predefinidos.
 3. Se lanza una moneda para ver quién empieza. Cada jugador recibe 5 cartas (con mulligan si no
    trae ningún Pokémon), elige su Pokémon activo y puede poner hasta 2 en el banco.
