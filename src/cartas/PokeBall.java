@@ -35,7 +35,7 @@ public class PokeBall extends Objeto {
             opciones.add(p.getResumen());
         }
 
-        int eleccion = interaccion.elegirOpcion("Poke Ball: ?que Pokemon buscas en tu mazo?", opciones);
+        int eleccion = interaccion.elegirOpcion("Poke Ball: ¿que Pokemon buscas en tu mazo?", opciones);
         Pokemon elegido = candidatos.get(eleccion);
 
         jugador.getMazo().extraer(elegido);

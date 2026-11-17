@@ -26,14 +26,14 @@ public class Misty extends Soporte {
         for (Pokemon p : aguas) {
             opciones.add(p.getResumen());
         }
-        int eleccion = interaccion.elegirOpcion("Misty: ?a que Pokemon de Agua le adjuntas energia?", opciones);
+        int eleccion = interaccion.elegirOpcion("Misty: ¿a que Pokemon de Agua le adjuntas energia?", opciones);
         Pokemon destino = aguas.get(eleccion);
 
         List<String> cantidades = new ArrayList<>();
         for (int i = 1; i <= MAX_ENERGIAS; i++) {
             cantidades.add(i + " energia(s) " + Tipo.AGUA.getSimbolo());
         }
-        int cantidad = interaccion.elegirOpcion("?Cuantas energias adjuntas? (hasta 3)", cantidades) + 1;
+        int cantidad = interaccion.elegirOpcion("¿Cuantas energias adjuntas? (hasta 3)", cantidades) + 1;
 
         for (int i = 0; i < cantidad; i++) {
             destino.adjuntarEnergia(Tipo.AGUA);

@@ -8,6 +8,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -126,14 +127,14 @@ public class PanelInicio extends JPanel {
     }
 
     private void comenzar() {
-        String nombre1 = textoOPorDefecto(campoNombre1, "Entrenador 1");
-        String nombre2 = textoOPorDefecto(campoNombre2, "Entrenador 2");
+        String nombre1 = campoNombre1.getText().trim();
+        String nombre2 = campoNombre2.getText().trim();
+        if(nombre1.isEmpty() || nombre2.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Cada entrenador debe tener un nombre", 
+                "Datos no validos", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         ventana.iniciarPartida(nombre1, nombre2,
                 comboMazo1.getSelectedIndex(), comboMazo2.getSelectedIndex());
-    }
-
-    private String textoOPorDefecto(JTextField campo, String porDefecto) {
-        String texto = campo.getText().trim();
-        return texto.isEmpty() ? porDefecto : texto;
     }
 }

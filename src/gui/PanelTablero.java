@@ -10,11 +10,13 @@ import java.awt.GridLayout;
 import java.util.List;
 import java.util.function.IntConsumer;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JToggleButton;
 import javax.swing.ScrollPaneConstants;
 
 import cartas.Carta;
@@ -39,6 +41,7 @@ public class PanelTablero extends JPanel {
     private final PanelCampo campoPropio = new PanelCampo();
     private final JPanel panelMano = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 4));
     private final JLabel tituloMano = new JLabel("Mano");
+    private final JLabel cartaSeleccionada = new JLabel(" ");
 
     private final JLabel tituloOpciones = new JLabel(" ");
     private final JPanel panelBotones = new JPanel(new GridLayout(0, 1, 0, 6));
@@ -99,6 +102,9 @@ public class PanelTablero extends JPanel {
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         scroll.setPreferredSize(new Dimension(100, 92));
         zona.add(scroll, BorderLayout.CENTER);
+        
+        cartaSeleccionada.setFont(new Font("SansSerif", Font.ITALIC, 12));
+        zona.add(cartaSeleccionada, BorderLayout.SOUTH);
         return zona;
     }
 
@@ -106,19 +112,27 @@ public class PanelTablero extends JPanel {
 
     // Redibuja todo con el estado actual del duelo.
     public void actualizarVista(int turno, Jugador actual, Jugador rival) {
-        Tipo zona = actual.getEnergiaZona();
-        String textoZona = (zona == null)
-                ? "Energia de zona: ya usada"
-                : "Energia de zona: " + zona.getSimbolo() + " (disponible)";
-        estado.setText("TURNO " + turno + " - Juega " + actual.getNombre() + "     " + textoZona);
-
-        campoRival.actualizar("RIVAL", rival);
+        if(turno == 0){
+            estado.setText("PREPARACION - " + actual.getNombre() + " arma su campo");
+            campoRival.ocultar("Rival - " + rival.getNombre() + " (si campo no se muestra durante la preparacion)");
+        }else{
+            Tipo zona = actual.getEnergiaZona();
+            String textoZona = (zona == null)
+                    ? "Energia de zona: ya usada"
+                    : "Energia de zona: " + zona.getSimbolo() + " (disponible)";
+            estado.setText("TURNO " + turno + " - Juega " + actual.getNombre() + "     " + textoZona);
+            campoRival.actualizar("RIVAL", rival);
+        }
         campoPropio.actualizar("TU CAMPO", actual);
 
         tituloMano.setText("Mano de " + actual.getNombre() + " (" + actual.getMano().size() + " cartas)");
+        cartaSeleccionada.setText(" ");
         panelMano.removeAll();
+        ButtonGroup grupo = new ButtonGroup();
         for (Carta carta : actual.getMano()) {
-            panelMano.add(crearCartaMano(carta));
+            JToggleButton boton = crearCartaMano(carta);
+            grupo.add(boton);
+            panelMano.add(boton);
         }
         panelMano.revalidate();
         panelMano.repaint();
@@ -160,12 +174,18 @@ public class PanelTablero extends JPanel {
         campoPropio.limpiar();
         panelMano.removeAll();
         tituloMano.setText("Mano");
+        cartaSeleccionada.setText(" ");
         quitarOpciones();
     }
 
     // ---------- Cartas de la mano ----------
 
-    private JPanel crearCartaMano(Carta carta) {
+    private javax.swing.border.Border bordeCarta(Color color, int grosor){
+        return BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(color, grosor),
+                                                BorderFactory.createEmptyBorder(2, 6, 2, 6));
+    }
+
+    private JToggleButton crearCartaMano(Carta carta) {
         String subtitulo;
         Color borde;
         if (carta instanceof Pokemon) {
@@ -179,22 +199,21 @@ public class PanelTablero extends JPanel {
             subtitulo = "";
             borde = Color.GRAY;
         }
-
-        JPanel panel = new JPanel(new GridLayout(2, 1));
-        panel.setPreferredSize(new Dimension(175, 58));
-        panel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(borde, 3),
-                BorderFactory.createEmptyBorder(2, 6, 2, 6)));
-        panel.setToolTipText(carta.getDescripcion());
-
-        JLabel nombre = new JLabel(carta.getNombre());
-        nombre.setFont(new Font("SansSerif", Font.BOLD, 12));
-        JLabel detalle = new JLabel(subtitulo);
-        detalle.setFont(new Font("SansSerif", Font.PLAIN, 11));
-        detalle.setForeground(Color.DARK_GRAY);
-        panel.add(nombre);
-        panel.add(detalle);
-        panel.setAlignmentY(Component.TOP_ALIGNMENT);
-        return panel;
+        JToggleButton boton = new JToggleButton("<html><b>" + carta.getNombre() + "</b><br>"
+                + subtitulo + "</html>");
+        boton.setPreferredSize(new Dimension(175, 58));
+        boton.setHorizontalAlignment(JToggleButton.LEFT);
+        boton.setFocusPainted(false);
+        boton.setToolTipText(carta.getDescripcion());
+        boton.setBorder(bordeCarta(borde, 3));
+        boton.addItemListener(e -> {
+            boolean elegida = boton.isSelected();
+            boton.setBorder(bordeCarta(borde, elegida ? 6 : 3));
+            cartaSeleccionada.setText(elegida
+                    ? "Carta seleccionada: " + carta.getNombre() + " - " + carta.getDescripcion()
+                    : " ");
+        });
+        boton.setAlignmentY(Component.TOP_ALIGNMENT);
+        return boton;
     }
 }
