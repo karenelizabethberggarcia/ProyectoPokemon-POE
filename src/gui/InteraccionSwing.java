@@ -22,6 +22,7 @@ public class InteraccionSwing implements Interaccion {
 
     private final VentanaPrincipal ventana;
     private final JTextArea areaRegistro;
+    private String ultimaClave = "";
 
     /** Aqui deja el tablero la opcion que pulso el jugador. */
     private final BlockingQueue<Integer> respuesta = new ArrayBlockingQueue<>(1);
@@ -60,12 +61,31 @@ public class InteraccionSwing implements Interaccion {
     public void esperarContinuar(String mensaje) {
         agregarAlRegistro("");
         agregarAlRegistro(mensaje);
-        elegirOpcion(mensaje, List.of("Continuar"));
+        respuesta.clear();
+        enHiloGrafico(() -> {
+            ventana.mostrarTransicion(mensaje, () -> respuesta.offer(0));
+            return null;
+        });
+        try{
+            respuesta.take();
+        }catch(InterruptedException e){
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("La partida fue interrumpida", e);
+        }
+        enHiloGrafico(() -> {
+            ventana.mostrarTablero();
+            return null;
+        });
     }
 
     @Override
     public void mostrarTablero(int turno, Jugador actual, Jugador rival) {
-        agregarAlRegistro("--- Turno " + turno + ": " + actual.getNombre() + " ---");
+        String clave = turno + ":" + actual.getNombre();
+        if(!clave.equals(ultimaClave)){
+            ultimaClave = clave;
+            agregarAlRegistro(turno == 0 ? "--- Preparacion: " + actual.getNombre() + " ---"
+                                : "--- Turno: " + turno + ":" + actual.getNombre() + " ---");
+        }
         // Se espera a que termine de dibujarse antes de seguir con la partida
         enHiloGrafico(() -> {
             ventana.getPanelTablero().actualizarVista(turno, actual, rival);
@@ -79,10 +99,7 @@ public class InteraccionSwing implements Interaccion {
                 + ganador.getNombre() + " se convierte en el nuevo Maestro Pokemon!\n"
                 + motivo + "\n" + LINEA);
         enHiloGrafico(() -> {
-            JOptionPane.showMessageDialog(ventana,
-                    ganador.getNombre() + " se convierte en el nuevo Maestro Pokemon!\n" + motivo,
-                    "Fin del duelo", JOptionPane.INFORMATION_MESSAGE);
-            ventana.mostrarInicio();
+            ventana.mostrarFin(ganador.getNombre(), motivo);
             return null;
         });
     }
