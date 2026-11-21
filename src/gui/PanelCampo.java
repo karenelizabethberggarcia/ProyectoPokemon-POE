@@ -56,6 +56,13 @@ public class PanelCampo extends JPanel {
         repaint();
     }
 
+    public void ocultar(String texto){
+        encabezado.setText(texto);
+        fila.removeAll();
+        revalidate();
+        repaint();
+    }
+    
     /** Deja el campo en blanco (al empezar una partida nueva). */
     public void limpiar() {
         encabezado.setText(" ");

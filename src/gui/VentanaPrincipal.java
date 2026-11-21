@@ -71,11 +71,18 @@ public class VentanaPrincipal extends JFrame {
     }
 
     public void iniciarPartida(String nombre1, String nombre2, int indiceMazo1, int indiceMazo2) {
-        areaRegistro.setText(""); // Limpiar el área de registro al iniciar una nueva partida
+        Jugador jugador1;
+        Jugador jugador2;
+        try{
+            jugador1 = new Jugador(nombre1, MazosPredefinidos.crear(indiceMazo1));
+            jugador2 = new Jugador(nombre2, MazosPredefinidos.crear(indiceMazo2));
+        }catch(IllegalArgumentException e){
+            JOptionPane.showMessageDialog(this, "El mazo no es valido" + e.getMessage(), 
+                        "Datos no validos", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        areaRegistro.setText("");
         panelTablero.reiniciar();
-
-        Jugador jugador1 = new Jugador(nombre1, MazosPredefinidos.crear(indiceMazo1));
-        Jugador jugador2 = new Jugador(nombre2, MazosPredefinidos.crear(indiceMazo2));
         this.partidaActual = new Partida(jugador1, jugador2, interaccionSwing);
 
         mostrarTablero();
@@ -99,18 +106,19 @@ public class VentanaPrincipal extends JFrame {
         hilo.start();
     }
 
-    public void mostrarTransicion() {
-        //panelTransicion.actualizarTexto(partidaActual.getJugadorActual().getNombre());
+    public void mostrarTransicion(String mensaje, Runnable alContinuar){
+        panelTablero.reiniciar();
+        panelTransicion.mostrar(mensaje, alContinuar);
         cardLayout.show(contenedor, PANEL_TRANSICION);
     }
 
     public void mostrarTablero() {
-        // panelTablero.actualizarVista(partidaActual);
         cardLayout.show(contenedor, PANEL_TABLERO);
     }
 
-    public void mostrarFin() {
-        // panelFin.mostrarResultados(partidaActual);
+    public void mostrarFin(String nombreGanador, String motivo){
+        panelTablero.reiniciar();
+        panelFin.mostrarResultados(nombreGanador, motivo);
         cardLayout.show(contenedor, PANEL_FIN);
     }
 
@@ -130,14 +138,6 @@ public class VentanaPrincipal extends JFrame {
 
     public InteraccionSwing getInteraccionSwing() {
         return interaccionSwing;
-    }
-
-    // --- Punto de entrada seguro (EDT) ---
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            VentanaPrincipal ventana = new VentanaPrincipal();
-            ventana.setVisible(true);
-        });
     }
 }   
 

@@ -10,7 +10,6 @@ import cartas.Entrenador;
 import cartas.Pokemon;
 import cartas.PokemonEvolucion;
 import cartas.Tipo;
-import consola.ConsolaUI;
 
 /**
  * Controla un duelo completo entre dos jugadores: preparacion, turnos,
@@ -50,10 +49,6 @@ public class Partida {
         }
     }
 
-    public Partida(Jugador jugador12, Jugador jugador22, ConsolaUI consola) {
-        this(jugador12, jugador22, (Interaccion) consola);
-    }
-
     public Jugador getGanador() {
         return ganador;
     }
@@ -70,8 +65,8 @@ public class Partida {
         Jugador rival = (actual == jugador1) ? jugador2 : jugador1;
         interaccion.mostrarMensaje("Se lanza una moneda... !" + actual.getNombre() + " empieza el duelo!");
 
-        prepararCampo(actual);
-        prepararCampo(rival);
+        prepararCampo(actual, rival);
+        prepararCampo(rival, actual);
 
         while (ganador == null) {
             jugarTurno(actual, rival);
@@ -106,9 +101,10 @@ public class Partida {
     }
 
     /** El jugador elige su Pokemon activo y, si quiere, hasta 2 en el banco. */
-    private void prepararCampo(Jugador jugador) {
+    private void prepararCampo(Jugador jugador, Jugador rival) {
         interaccion.esperarContinuar("Preparacion del campo de " + jugador.getNombre() + ".");
         interaccion.mostrarMensaje("Tu mano: " + nombresDeCartas(jugador.getMano()));
+        interaccion.mostrarTablero(0, jugador, rival);
 
         List<Pokemon> disponibles = jugador.getBasicosMano();
         int eleccion = interaccion.elegirOpcion(jugador.getNombre() + ", elige tu Pokemon activo:",
@@ -116,6 +112,7 @@ public class Partida {
         Pokemon activo = disponibles.get(eleccion);
         jugador.quitarDeMano(activo);
         jugador.getCampo().colocarActivo(activo);
+        interaccion.mostrarTablero(0, jugador, rival);
 
         while (!jugador.getCampo().bancoLleno()) {
             List<Pokemon> restantes = jugador.getBasicosMano();
@@ -124,13 +121,14 @@ public class Partida {
             }
             List<String> opciones = resumenes(restantes);
             opciones.add("No colocar mas Pokemon");
-            int opcion = interaccion.elegirOpcion("?Quieres poner un Pokemon en el banco?", opciones);
+            int opcion = interaccion.elegirOpcion("¿Quieres poner un Pokemon en el banco?", opciones);
             if (opcion == restantes.size()) {
                 break;
             }
             Pokemon elegido = restantes.get(opcion);
             jugador.quitarDeMano(elegido);
             jugador.getCampo().agregarABanco(elegido);
+            interaccion.mostrarTablero(0, jugador, rival);
         }
     }
 
@@ -198,7 +196,7 @@ public class Partida {
         }
         opciones.add("Cancelar");
 
-        String titulo = "?A que Pokemon le adjuntas la energia " + jugador.getEnergiaZona().getSimbolo() + "?";
+        String titulo = "¿A que Pokemon le adjuntas la energia " + jugador.getEnergiaZona().getSimbolo() + "?";
         int eleccion = interaccion.elegirOpcion(titulo, opciones);
         if (eleccion == enJuego.size()) {
             return;
@@ -224,7 +222,7 @@ public class Partida {
         }
         opciones.add("Cancelar");
 
-        int eleccion = interaccion.elegirOpcion("?Que carta de entrenador juegas?", opciones);
+        int eleccion = interaccion.elegirOpcion("¿Que carta de entrenador juegas?", opciones);
         if (eleccion == entrenadores.size()) {
             return;
         }
@@ -261,7 +259,7 @@ public class Partida {
 
         List<String> opciones = resumenes(enMano);
         opciones.add("Cancelar");
-        int eleccion = interaccion.elegirOpcion("?Que Pokemon colocas en el banco?", opciones);
+        int eleccion = interaccion.elegirOpcion("¿Que Pokemon colocas en el banco?", opciones);
         if (eleccion == enMano.size()) {
             return;
         }
@@ -360,7 +358,7 @@ public class Partida {
         List<Pokemon> banco = campo.getBanco();
         List<String> opciones = resumenes(banco);
         opciones.add("Cancelar");
-        String titulo = "Retirar a " + activo.getNombre() + " cuesta " + costo + " energia(s). ?Quien pasa al frente?";
+        String titulo = "Retirar a " + activo.getNombre() + " cuesta " + costo + " energia(s). ¿Quien pasa al frente?";
         int eleccion = interaccion.elegirOpcion(titulo, opciones);
         if (eleccion == banco.size()) {
             return;
@@ -390,7 +388,7 @@ public class Partida {
                     opciones.add(t.getSimbolo() + " " + t.getNombre());
                 }
                 int eleccion = interaccion.elegirOpcion(
-                        "?Que energia descartas? (" + (i + 1) + " de " + cantidad + ")", opciones);
+                        "¿Que energia descartas? (" + (i + 1) + " de " + cantidad + ")", opciones);
                 aDescartar = distintas.get(eleccion);
             }
             pokemon.descartarEnergia(aDescartar);
